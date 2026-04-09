@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>嵌入式编程入门——Arduino IDE的使用 - 课程日志</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .content {
+            margin: 30px 0;
+            line-height: 1.6;
+        }
+        ul li {
+            margin: 8px 0;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #2d8cf0;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .back-btn:hover {
+            background: #1b7acc;
+        }
+
+        /* 结果展示样式（保留但不单独分区） */
+        .result-img {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin: 10px 0 25px 0;
+            display: block;
+            object-fit: contain;
+        }
+        .result-img video {
+            max-height: 400px;
+        }
+        /* 代码块样式 */
+        .code-block {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 14px;
+            line-height: 1.8;
+            margin: 10px 0;
+            overflow-x: auto;
+            white-space: pre;
+            tab-size: 4;
+            hyphens: none;
+        }
+        .screenshot-placeholder {
+            border: 2px dashed #ccc;
+            background-color: #fafafa;
+            padding: 40px 20px;
+            text-align: center;
+            color: #666;
+            margin: 10px 0 25px 0;
+            border-radius: 6px;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>嵌入式编程入门——Arduino IDE的使用</h1>
+        <div class="content">
+            <!-- 1. Arduino IDE入门操作 -->
+            <h2>1. Arduino IDE入门操作</h2>
+            <p>学习Arduino IDE的基础使用流程，完成软件安装、环境配置与程序上传的全流程实操，掌握嵌入式开发的基础工具链。</p>
+            <ul>
+                <li>Arduino IDE 软件安装、环境配置与板型选择（Uno/Nano/ESP32）</li>
+                <li>串口监视器配置与使用（波特率、数据格式）</li>
+                <li>程序上传流程与常见上传失败问题排查</li>
+                <li>IDE内置示例程序的查看与运行（如Blink、Breathe）</li>
+            </ul>
+
+            <!-- 2. ESP32开发板的基础功能与应用 -->
+            <h2>2. ESP32开发板的基础功能与应用</h2>
+            <p>学习ESP32开发板核心功能的使用方法，掌握数字/模拟I/O、串口、WIFI、舵机等基础模块的控制逻辑。</p>
+            <ul>
+                <li>串口通信：Serial.begin()/Serial.print() 实现数据打印与调试</li>
+                <li>数字输出/输入：pinMode()、digitalWrite()、digitalRead() 控制LED/按键</li>
+                <li>模拟输入/输出：analogRead()（读取电位器）、analogWrite()（PWM控制）</li>
+                <li>WIFI功能：连接本地网络、TCP/UDP通信、HTTP请求（基础模板）</li>
+                <li>舵机控制：Servo库使用、角度控制与精准定位</li>
+            </ul>
+
+            <!-- 3. 呼吸灯实例截图 + 基础示例代码 -->
+            <h3>Arduino IDE提供的呼吸灯实例代码位置截图</h3>
+            <img src="图片视频/呼吸灯实例位置.png" alt="呼吸灯实例代码位置截图" class="result-img">
+
+            <h3>基础示例代码（LED闪烁效果）</h3>
+            <div class="code-block">
+// the setup function runs once when you press reset or power the board
+void setup() {
+    // initialize digital pin LED_BUILTIN as an output.
+    pinMode(LED_BUILTIN, OUTPUT);
+}
+
+// the loop function runs over and over again forever
+void loop() {
+    digitalWrite(LED_BUILTIN, HIGH);  // change state of the LED by setting the pin to the HIGH voltage level
+    delay(1000);                      // wait for a second
+    digitalWrite(LED_BUILTIN, LOW);   // change state of the LED by setting the pin to the LOW voltage level
+    delay(1000);                      // wait for a second
+}
+            </div>
+
+            <!-- 4. Arduino IDE编译上传界面截图 -->
+            <h3>Arduino IDE编译上传界面截图</h3>
+            <img src="图片视频/呼吸灯编译上传.png" alt="呼吸灯编译上传截图" class="result-img">
+            <p>Arduino IDE程序编写与上传界面，展示开发调试过程。</p>
+
+            <!-- 5. 呼吸灯程序运行效果 -->
+            <h3>呼吸灯程序运行效果</h3>
+            <video 
+                src="图片视频/呼吸灯运行效果.mp4" 
+                alt="Arduino呼吸灯运行效果" 
+                class="result-img"
+                controls
+                autoplay
+                muted
+                loop
+                preload="metadata"
+            >
+            </video>
+            <p>基于Arduino IDE编写的LED闪烁程序运行效果，LED按照1秒间隔交替亮灭。</p>
+
+            <!-- 6. 嵌入式编程练习（模板） -->
+            <h2>3. 嵌入式编程练习</h2>
+            <p>利用ESP32开发板的多种基础功能，结合课堂发放的元器件，设计并实现一个综合应用（示例：WIFI控制舵机）。</p>
+            <h3>练习目标</h3>
+            <p>融合至少两种ESP32基础功能（如WIFI + 舵机、数字输入 + WIFI、模拟输入 + 数字输出等），完成一个具备实际交互逻辑的小项目。</p>
+            <h3>参考方向（WIFI控制舵机）</h3>
+            <ul>
+                <li>步骤1：配置ESP32连接本地WIFI网络，建立TCP服务端/客户端</li>
+                <li>步骤2：编写舵机控制函数，实现角度精准调节（0-180°）</li>
+                <li>步骤3：通过手机/电脑向ESP32发送指令，触发舵机角度变化</li>
+                <li>步骤4：添加按键/电位器作为本地控制备份，提升交互性</li>
+                <li>步骤5：调试通信稳定性与舵机响应精度，优化代码逻辑</li>
+            </ul>
+            <h3>预留代码/内容区域</h3>
+            <p>（待补充：综合应用的完整代码、调试过程、运行效果截图/视频）</p>
+
+            <!-- 保留常见问题 -->
+            <h3>常见问题及解决方法</h3>
+            <ul>
+                <li>问题1：程序上传失败，提示“端口未找到”
+                    <br>解决方法：检查USB数据线连接、在Arduino IDE中正确选择串口（工具->端口）、安装对应主板驱动</li>
+                <li>问题2：LED无反应，程序无报错
+                    <br>解决方法：检查引脚定义是否与实际焊接一致、LED正负极是否接反、电路是否存在虚焊</li>
+                <li>问题3：LED闪烁频率异常
+                    <br>解决方法：调整delay延时参数、检查主板时钟频率是否正常、确认程序中循环逻辑无错误</li>
+            </ul>
+        </div>
+
+<<<<<<< HEAD
+=======
+        <!-- 结果展示区域 -->
+        <div class="result-section">
+            <h2>📌 结果展示</h2>
+            <h3>1. Arduino IDE提供的呼吸灯实例代码位置截图</h3>
+            <img src="图片视频/呼吸灯实例位置.png" alt="呼吸灯实例代码位置截图" class="result-img">
+
+            <h3>2. Arduino IDE编译上传界面截图</h3>
+            <img src="图片视频/呼吸灯编译上传.png" alt="呼吸灯编译上传截图" class="result-img">
+            <p>Arduino IDE程序编写与上传界面，展示开发调试过程。</p>
+        </div>
+
+        <h3>3. 呼吸灯程序运行效果</h3>
+        <video 
+            src="图片视频/呼吸灯运行效果.mp4" 
+            alt="Arduino呼吸灯运行效果" 
+            class="result-img"
+            controls  <!-- 播放控件 -->
+            autoplay  <!-- 自动播放（静音下生效） -->
+            muted     <!-- 静音播放 -->
+            loop      <!-- 循环播放 -->
+            preload="metadata"  <!-- 预加载元数据 -->
+        >
+        </video>
+        <p>基于Arduino IDE编写的LED闪烁程序运行效果，LED按照1秒间隔交替亮灭。</p>
+            
+>>>>>>> 6451c58a01f7e654ab3017750fa7bc70a25cfa46
+        <!-- 返回主页按钮 -->
+        <a href="index.html" class="back-btn">返回日志主页</a>
+    </div>
+</body>
+</html>

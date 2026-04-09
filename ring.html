@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个性戒指设计 - 课程日志</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .content {
+            margin: 30px 0;
+            line-height: 1.6;
+        }
+        ul li {
+            margin: 8px 0;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #2d8cf0;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .back-btn:hover {
+            background: #1b7acc;
+        }
+
+        /* 结果展示样式 */
+        .result-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+        .result-section h2 {
+            color: #444;
+            margin-bottom: 20px;
+        }
+        .result-img {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin: 10px 0 25px 0;
+        }
+        .result-video {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        /* 统一源文件链接样式（和3dprint.html一致） */
+        .download-link {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 8px 16px;
+            background: #5cb85c;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .download-link:hover {
+            background: #4cae4c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>个性戒指（凸雕刻字）—— Autodesk Fusion 的使用</h1>
+        <div class="content">
+            <p>学习使用Autodesk Fusion 360进行3D建模，完成个性化凸雕刻字戒指设计，为3D打印做准备。</p>
+            <p><strong>本次学习内容：</strong></p>
+            <ul>
+                <li>Fusion 360 界面认知与基础操作</li>
+                <li>环形基础体建模、尺寸参数调整</li>
+                <li>文本创建与凸雕效果设计技巧</li>
+                <li>模型细节优化与倒角处理</li>
+                <li>3D 打印文件导出格式（STL）设置</li>
+                <li>模型检查与打印可行性分析</li>
+            </ul>
+        </div>
+
+        <!-- 结果展示 -->
+        <div class="result-section">
+            <h2>📌 结果展示</h2>
+            
+            <!-- 图片展示 -->
+            <h3>1. 戒指3D模型效果图</h3>
+            <img src="图片视频/ring_model.png" alt="个性戒指3D建模效果图" class="result-img">
+            <p>完成戒指建模、凸雕刻字、倒角优化后的最终3D效果展示。</p>
+
+            <!-- 视频展示 -->
+            <h3>2. 设计过程演示视频</h3>
+            <video class="result-video" controls>
+                <source src="图片视频/ring_demo.mp4" type="video/mp4">
+                您的浏览器不支持视频播放
+            </video>
+            <p>视频包含：Fusion 360 建模全过程、文字雕刻演示。</p>
+
+            <!-- 3. 源文件下载链接（统一样式） -->
+            <h3>3. 源文件下载</h3>
+            <a href="源文件/个性戒指.stl" class="download-link">个性戒指STL文件</a>
+            <p>包含可直接用于Bambu Studio打印的模型源文件。</p>
+        </div>
+
+        <!-- 返回主页按钮 -->
+        <a href="index.html" class="back-btn">返回日志主页</a>
+    </div>
+</body>
+</html>

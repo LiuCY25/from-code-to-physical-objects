@@ -60,7 +60,9 @@
 
 ## 📬 联系方式
 - Gitee仓库：[https://gitee.com/lcy4246/from-code-to-physical-objects.git]
+- Github仓库：[https://github.com/LiuCY25/from-code-to-physical-objects.git]
 - 邮箱：[3502027671@qq.com]
+- 个人日志-Github静态网站：[https://liucy25.github.io/from-code-to-physical-objects/]
 
 ## 📄 许可证
 本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件。

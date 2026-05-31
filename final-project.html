@@ -247,6 +247,17 @@
   }
 
   .footer { text-align: center; color: var(--muted); font-size: 0.82em; margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--border); }
+
+  .back-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #2d8cf0;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+  }
+  .back-btn:hover { background: #1b7acc; }
 </style>
 </head>
 <body>
@@ -976,7 +987,8 @@ int8_t t = -readJoy(PIN_JOY1_X);  // 仅取反输入，不改显示标签</pre>
 </div>
 
 <div class="footer">
-  期末创新项目 · 2026年5月 Hackathon · 最后更新 2026-05-31
+  <a href="index.html" class="back-btn">返回日志主页</a>
+  <p style="margin-top:20px;">期末创新项目 · 2026年5月 Hackathon · 最后更新 2026-05-31</p>
 </div>
 
 </body>

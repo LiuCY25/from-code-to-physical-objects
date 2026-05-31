@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCB设计 - 课程日志</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --surface: #f8fafc;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --blue: #2563eb;
+            --blue-hover: #1d4ed8;
+            --blue-light: #eff6ff;
+            --green: #059669;
+            --green-hover: #047857;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(37,99,235,0.04) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 90%, rgba(5,150,105,0.04) 0%, transparent 60%);
+            animation: bgShift 12s ease-in-out infinite alternate;
+        }
+        @keyframes bgShift { 0% { opacity: 0.6; } 100% { opacity: 1; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .container { max-width: 840px; margin: 0 auto; padding: 48px 24px 64px; }
+        .header { text-align: center; margin-bottom: 40px; animation: fadeInUp 0.7s ease-out; }
+        .header h1 { font-size: clamp(1.4rem, 4vw, 1.85rem); font-weight: 700; color: var(--text); letter-spacing: -0.02em; margin-bottom: 8px; }
+        .content-block {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            animation: fadeInUp 0.6s ease-out both;
+        }
+        .content-block:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .content-block h2 { font-size: 1.15rem; font-weight: 600; color: var(--blue); margin: 24px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--blue-light); display: flex; align-items: center; gap: 8px; }
+        .content-block h2:first-child { margin-top: 0; }
+        .content-block h2::before { content: ''; display: inline-block; width: 4px; height: 20px; background: var(--blue); border-radius: 2px; }
+        .content-block h3 { font-size: 1.02rem; font-weight: 600; color: var(--text); margin: 20px 0 8px; }
+        .content-block h4 { font-size: 0.93rem; font-weight: 600; color: var(--text-muted); margin: 16px 0 6px; }
+        .content-block p { margin-bottom: 12px; font-size: 0.96rem; }
+        .content-block ul, .content-block ol { padding-left: 20px; margin-bottom: 12px; }
+        .content-block li { margin: 6px 0; font-size: 0.94rem; }
+        .content-block hr { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+        .result-img { width: 100%; max-width: 600px; border-radius: var(--radius-sm); box-shadow: var(--shadow); margin: 8px 0 20px; display: block; object-fit: contain; transition: box-shadow 0.3s ease; }
+        .result-img:hover { box-shadow: var(--shadow-md); }
+        .result-svg { width: 100%; max-width: 700px; border-radius: var(--radius-sm); box-shadow: var(--shadow); margin: 8px 0 20px; display: block; }
+        .pin-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9em; }
+        .pin-table th { text-align: left; background: var(--surface); color: var(--blue); padding: 10px 14px; border-bottom: 2px solid var(--border); font-weight: 600; white-space: nowrap; }
+        .pin-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+        .pin-table tr:hover td { background: var(--blue-light); }
+        .pin-table .pin-num { font-weight: 600; color: var(--blue); white-space: nowrap; }
+        .pin-table .pin-name { font-weight: 600; white-space: nowrap; }
+        .download-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            margin: 6px 0 16px; padding: 10px 20px;
+            background: var(--green); color: #fff; text-decoration: none;
+            border-radius: var(--radius-sm); font-size: 0.9rem; font-weight: 500;
+            transition: all 0.25s ease;
+        }
+        .download-link:hover { background: var(--green-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(5,150,105,0.3); }
+        .req-box {
+            background: var(--surface);
+            border-left: 4px solid var(--blue);
+            border-radius: var(--radius-sm);
+            padding: 16px 20px;
+            margin: 12px 0;
+        }
+        .req-box ul { margin-bottom: 0; }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            margin-top: 8px; padding: 12px 24px;
+            background: var(--blue); color: #fff; text-decoration: none;
+            border-radius: var(--radius-sm); font-size: 0.95rem; font-weight: 500;
+            transition: all 0.25s ease;
+            animation: fadeInUp 0.6s 0.3s ease-out both;
+        }
+        .back-btn:hover { background: var(--blue-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+        a { color: var(--blue); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        @media (max-width: 640px) { .container { padding: 24px 16px 40px; } .content-block { padding: 20px; } .result-img, .result-svg { max-width: 100%; } .back-btn { width: 100%; justify-content: center; } .pin-table { font-size: 0.78em; } .pin-table td, .pin-table th { padding: 6px 8px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header"><h1>PCB设计——嘉立创EDA的使用</h1></div>
+        <div class="content-block">
+            <p>学习使用国产免费工具嘉立创EDA完成电路原理图设计、PCB布局布线、工程文件导出与打样全流程，掌握电子电路硬件设计基础技能。</p>
+            <p><strong>本次学习内容：</strong></p>
+            <ul>
+                <li>嘉立创EDA 软件界面认知与工程创建</li>
+                <li>元件库调用、原理图绘制与电气连接</li>
+                <li>原理图封装匹配与DRC电气规则检查</li>
+                <li>PCB板框设置、元件布局与布线规则配置</li>
+                <li>PCB手动布线、自动布线与优化技巧</li>
+                <li>3D预览、丝印调整与生产文件导出</li>
+            </ul>
+
+            <!-- ═══ 作业一 ═══ -->
+            <hr>
+            <h2>作业一：运用AI设计LED电子徽章</h2>
+
+            <div class="req-box">
+                <p style="font-weight:600;margin-bottom:8px;">设计要求</p>
+                <ul>
+                    <li>含校庆元素</li>
+                    <li>4~5 个元件</li>
+                    <li>标注尺寸</li>
+                    <li>线条宽度 1mm，拐弯必须 45°</li>
+                    <li>提交两张图：PCB图 + 3D预览图</li>
+                </ul>
+            </div>
+
+            <h3>1. 电路原理图设计图</h3>
+            <img src="图片视频/PCB原理图.png" alt="PCB电路原理图" class="result-img">
+            <p>完成绘制的单片机最小系统电路原理图，通过电气规则检查。</p>
+
+            <h3>2. PCB布局与布线图</h3>
+            <img src="图片视频/PCB布线图.png" alt="PCB布局布线效果图" class="result-img">
+            <p>完成布局、布线后的PCB工程文件，符合1mm线宽、45°拐弯等设计规范。</p>
+
+            <h3>3. PCB 3D预览效果图</h3>
+            <img src="图片视频/PCB渲染图1.png" alt="PCB 3D预览图" class="result-img">
+            <img src="图片视频/PCB渲染图2.png" alt="PCB 3D预览图" class="result-img">
+            <p>PCB板3D可视化预览效果，直观展示成品外观。</p>
+
+            <!-- ═══ 作业二 ═══ -->
+            <hr>
+            <h2>作业二：TP4056 锂电池充电管理 — 原理图复刻与PCB设计</h2>
+
+            <div class="req-box">
+                <p style="font-weight:600;margin-bottom:8px;">作业要求</p>
+                <ol>
+                    <li>复刻原理图；TP4056 选型时直接考虑有散热片的型号（立创商城商品编号 <strong>C16581</strong>）</li>
+                    <li>阅读 C16581 数据手册，绘制管脚功能表格，结合典型应用电路简述每个管脚功能，分析电阻选型和电容作用</li>
+                    <li>BAT 为网络标签；MINI_USB-B 在用户贡献库中查找</li>
+                    <li>原理图画完后进行网络检查</li>
+                    <li>PCB图布局：布局规范、信号走向清晰、输入输出元件置于板边、排列整齐、版面紧凑、边框层设计为圆角矩形</li>
+                    <li>PCB布线：VCC 线进行适当的实线填充；全板铺铜，铺铜网络设置为 GND 网络</li>
+                    <li>DRC 检查并优化</li>
+                    <li>导出 Gerber 文件（制造 → PCB制版文件）</li>
+                    <li>提交三张截图：原理图 + PCB图 + 管脚功能表</li>
+                    <li>一周内独立完成</li>
+                </ol>
+            </div>
+
+            <h3>TP4056 芯片概述</h3>
+            <p>TP4056 是一款完整的单节锂离子电池恒流/恒压线性充电管理芯片，采用 ESOP8 封装（底部带散热片）。C16581 为带散热片版本，适合需要良好散热的 PCB 布局。数据手册参考：<a href="https://item.szlcsc.com/datasheet/TP4056-42-ESOP8/17264.html" target="_blank" rel="noopener">TP4056 数据手册（立创商城）</a>。</p>
+
+            <h3>TP4056 (C16581) 管脚功能表</h3>
+            <table class="pin-table">
+                <thead>
+                    <tr><th>管脚</th><th>名称</th><th>功能说明</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="pin-num">1</td>
+                        <td class="pin-name">TEMP</td>
+                        <td>电池温度检测输入端。外接 NTC 热敏电阻到地，与 R3 分压后接入。当 TEMP 引脚电压低于 45%×VIN 或高于 80%×VIN 时，芯片暂停充电（温度保护）。若不需要温度检测功能，将该引脚直接接地禁用。</td>
+                    </tr>
+                    <tr>
+                        <td class="pin-num">2</td>
+                        <td class="pin-name">PROG</td>
+                        <td>充电电流编程引脚。通过外接电阻 RPROG 到 GND 设定恒流充电阶段的电流值。计算公式：IBAT = 1200 / RPROG（RPROG 单位 kΩ）。例如 RPROG=1.2kΩ 时，充电电流为 1000mA。电阻精度直接影响充电电流精度，建议使用 1% 精度电阻。</td>
+                    </tr>
+                    <tr>
+                        <td class="pin-num">3</td>
+                        <td class="pin-name">GND</td>
+                        <td>电源地。芯片的参考地，需与系统 GND 良好连接。ESOP8 封装的底部散热片也需接 GND 并大面积铺铜以利于散热。</td>
+                    </tr>
+                    <tr>
+                        <td class="pin-num">4</td>
+                        <td class="pin-name">VCC</td>
+                        <td>电源输入引脚。输入电压范围 4.5V~6.5V，典型值 5V（USB 供电）。需在 VCC 与 GND 之间并联 10μF 或更大的滤波电容（C1），且尽量靠近芯片引脚放置，以滤除电源纹波和噪声，保证芯片稳定工作。</td>
+                    </tr>
+                    <tr>
+                        <td class="pin-num">5</td>
+                        <td class="pin-name">BAT</td>
+                        <td>电池连接引脚。连接到锂离子电池的正极，为电池提供恒流/恒压充电电流。内部集成功率 MOSFET 控制充电过程，充电截止电压 4.2V±1%。需在 BAT 与 GND 之间并联 10μF 或更大的电容（C2），用于稳定输出电压并抑制电池端的高频噪声。</td>
+                    </tr>
+                    <tr>
+                        <td class="pin-num">6</td>
+                        <td class="pin-name">STDBY</td>
+                        <td>充电完成指示输出（开漏）。当电池充满（充电电流降至 C/10 以下）时，内部 MOSFET 导通，将该引脚拉低，可驱动 LED 指示充满状态。需外接 LED + 限流电阻到 VCC。悬空时不影响充电功能。</td>
+                    </tr>
+                    <tr>
+                        <td class="pin-num">7</td>
+                        <td class="pin-name">CHRG</td>
+                        <td>充电状态指示输出（开漏）。正在充电时内部 MOSFET 导通拉低该引脚，驱动 LED 指示充电进行中。充电完成或未接入电池时该引脚为高阻态。需外接 LED + 限流电阻到 VCC。</td>
+                    </tr>
+                    <tr>
+                        <td class="pin-num">8</td>
+                        <td class="pin-name">CE</td>
+                        <td>芯片使能输入引脚。高电平（>1.2V）或悬空时充电功能正常使能；拉低到 GND 时芯片停止充电。可用于外部 MCU 控制充电启停。不需要控制功能时可直接悬空（内部上拉）。</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>电阻选型分析</h4>
+            <ul>
+                <li><strong>RPROG（充电电流设定电阻）：</strong>建议使用 <strong>1.2kΩ ±1% 0805</strong>，对应 1000mA 充电电流。若电池容量较小（如 500mAh），应调整为 2.4kΩ（500mA），遵循 0.5C~1C 充电倍率原则。不可使用普通碳膜电阻（温漂大），建议金属膜或厚膜贴片电阻。</li>
+                <li><strong>LED 限流电阻：</strong>STDBY 和 CHRG 引脚的 LED 各串 1kΩ~2kΩ 电阻到 VCC（5V），限流约 1.5~3mA，保证 LED 亮度适中且不超芯片引脚灌电流能力。</li>
+                <li><strong>TEMP 分压电阻（若使用 NTC）：</strong>R3 与 NTC 分压，通常 R3 取 10kΩ（与 NTC 25℃ 标称阻值相等），使常温下 TEMP 电压落在正常范围内。</li>
+            </ul>
+
+            <h4>电容作用分析</h4>
+            <ul>
+                <li><strong>C1（VCC 端滤波电容，10μF）：</strong>滤除输入电源的纹波和瞬态噪声，防止 USB 供电的波动导致芯片工作异常。大容量电解或 MLCC 均可，尽量靠近 VCC 引脚放置。</li>
+                <li><strong>C2（BAT 端输出电容，10μF）：</strong>稳定 BAT 引脚的输出电压，抑制充电过程中功率 MOSFET 开关产生的高频噪声，防止电池端电压振荡导致充电提前终止。同样需靠近 BAT 引脚放置。</li>
+            </ul>
+
+            <h3>结果展示</h3>
+
+            <h4>① 原理图</h4>
+            <img src="图片视频/PCB_2_Sheet_1.svg" alt="TP4056 充电管理原理图" class="result-svg">
+            <p>TP4056 锂电池充电管理完整原理图，BAT 为网络标签，MINI_USB-B 取自用户贡献库。完成后通过网络检查（NET 检查通过）。</p>
+
+            <h4>② PCB 布线图</h4>
+            <img src="图片视频/作业2_布线图.png" alt="TP4056 PCB布线图" class="result-img">
+            <p>PCB 布局布线完成：VCC 线实线填充处理，全板铺铜（GND 网络），板框为圆角矩形，输入（USB）与输出（BAT）元件分置板边，布局紧凑整齐。DRC 检查通过。</p>
+
+            <h4>③ PCB 3D 渲染图</h4>
+            <img src="图片视频/作业2_3D渲染图 .png" alt="TP4056 PCB 3D渲染图" class="result-img">
+            <p>PCB 3D 预览效果，ESOP8 封装散热片可见，元件排列清晰。</p>
+
+            <h4>④ TP4056 管脚功能图</h4>
+            <img src="图片视频/作业2_TP4056管脚功能图.png" alt="TP4056 管脚功能图" class="result-img">
+            <p>C16581（ESOP8 封装）管脚定义图，标注各管脚名称及功能简述。</p>
+
+            <h3>源文件下载</h3>
+            <a href="源文件/Gerber_PCB_2.zip" class="download-link">PCB制版文件 Gerber（作业二）</a>
+            <p>包含 Gerber 制版文件（制造 → PCB制版文件 → 导出），可直接提交立创商城打样。</p>
+        </div>
+        <a href="index.html" class="back-btn">← 返回日志主页</a>
+    </div>
+</body>
+</html>

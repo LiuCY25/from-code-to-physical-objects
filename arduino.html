@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>嵌入式编程入门——Arduino IDE的使用 - 课程日志</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --surface: #f8fafc;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --blue: #2563eb;
+            --blue-hover: #1d4ed8;
+            --blue-light: #eff6ff;
+            --green: #059669;
+            --green-hover: #047857;
+            --green-light: #ecfdf5;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(37,99,235,0.04) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 90%, rgba(5,150,105,0.04) 0%, transparent 60%);
+            animation: bgShift 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgShift {
+            0% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        /* ── Container ── */
+        .container {
+            max-width: 840px;
+            margin: 0 auto;
+            padding: 48px 24px 64px;
+        }
+
+        /* ── Header ── */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.7s ease-out;
+        }
+
+        .header h1 {
+            font-size: clamp(1.4rem, 4vw, 1.85rem);
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .header .date-bar {
+            display: inline-block;
+            position: relative;
+        }
+
+        .header .date-bar::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 32px;
+            height: 3px;
+            border-radius: 2px;
+            background: var(--blue);
+            animation: expandBar 0.6s 0.4s ease-out both;
+        }
+
+        @keyframes expandBar {
+            from { width: 0; }
+            to { width: 32px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Content ── */
+        .content-block {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            animation: fadeInUp 0.6s ease-out both;
+        }
+
+        .content-block:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .content-block h2 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--blue);
+            margin: 24px 0 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--blue-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .content-block h2:first-child { margin-top: 0; }
+
+        .content-block h2::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background: var(--blue);
+            border-radius: 2px;
+        }
+
+        .content-block h3 {
+            font-size: 1.02rem;
+            font-weight: 600;
+            color: var(--text);
+            margin: 20px 0 8px;
+        }
+
+        .content-block h4 {
+            font-size: 0.93rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin: 16px 0 6px;
+        }
+
+        .content-block p { margin-bottom: 12px; font-size: 0.96rem; }
+
+        .content-block ul, .content-block ol {
+            padding-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        .content-block li { margin: 6px 0; font-size: 0.94rem; }
+
+        hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 28px 0;
+        }
+
+        /* ── Media ── */
+        .result-img {
+            width: 100%;
+            max-width: 600px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow);
+            margin: 8px 0 20px;
+            display: block;
+            object-fit: contain;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .result-img:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ── Code Block ── */
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px 24px;
+            border-radius: var(--radius-sm);
+            font-family: "JetBrains Mono", "Fira Code", Consolas, "Courier New", monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            margin: 10px 0 16px;
+            overflow-x: auto;
+            white-space: pre;
+            tab-size: 4;
+            position: relative;
+            border: 1px solid #334155;
+        }
+
+        .code-block::before {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+            margin-bottom: 12px;
+            box-shadow: 16px 0 0 #eab308, 32px 0 0 #ef4444;
+        }
+
+        /* ── Buttons & Links ── */
+        .download-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin: 6px 0 16px;
+            padding: 10px 20px;
+            background: var(--green);
+            color: #fff;
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.25s ease;
+        }
+
+        .download-link:hover {
+            background: var(--green-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(5,150,105,0.3);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            padding: 12px 24px;
+            background: var(--blue);
+            color: #fff;
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.25s ease;
+            animation: fadeInUp 0.6s 0.5s ease-out both;
+        }
+
+        .back-btn:hover {
+            background: var(--blue-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+        }
+
+        /* ── Wiring card ── */
+        .hardware-wiring {
+            background: var(--surface);
+            border-radius: var(--radius-sm);
+            padding: 16px 20px;
+            margin: 8px 0 16px;
+        }
+
+        .hardware-wiring ul { margin-bottom: 0; }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .container { padding: 24px 16px 40px; }
+            .content-block { padding: 20px; }
+            .content-block h2 { font-size: 1.05rem; }
+            .content-block h3 { font-size: 0.96rem; }
+            .code-block { font-size: 0.75rem; padding: 14px 16px; }
+            .result-img { max-width: 100%; }
+            .back-btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>嵌入式编程入门——Arduino IDE的使用</h1>
+        </div>
+
+        <div class="content-block">
+
+            <h2>1. Arduino IDE入门操作</h2>
+            <p>学习Arduino IDE的基础使用流程，完成软件安装、环境配置与程序上传的全流程实操，掌握嵌入式开发的基础工具链。</p>
+            <ul>
+                <li>Arduino IDE 软件安装、环境配置与板型选择（Uno/Nano/ESP32）</li>
+                <li>串口监视器配置与使用（波特率、数据格式）</li>
+                <li>程序上传流程与常见上传失败问题排查</li>
+                <li>IDE内置示例程序的查看与运行（如Blink、Breathe）</li>
+            </ul>
+
+            <h3>基础示例代码（LED闪烁效果）</h3>
+            <h3>Arduino IDE提供的呼吸灯实例代码位置截图</h3>
+            <img src="图片视频/呼吸灯实例位置.png" alt="呼吸灯实例代码位置截图" class="result-img">
+
+            <div class="code-block">
+// the setup function runs once when you press reset or power the board
+void setup() {
+    // initialize digital pin LED_BUILTIN as an output.
+    pinMode(LED_BUILTIN, OUTPUT);
+}
+
+// the loop function runs over and over again forever
+void loop() {
+    digitalWrite(LED_BUILTIN, HIGH);  // change state of the LED by setting the pin to the HIGH voltage level
+    delay(1000);                      // wait for a second
+    digitalWrite(LED_BUILTIN, LOW);   // change state of the LED by setting the pin to the LOW voltage level
+    delay(1000);                      // wait for a second
+}
+            </div>
+
+            <h3>Arduino IDE编译上传界面截图</h3>
+            <img src="图片视频/呼吸灯编译上传.png" alt="LED闪烁编译上传截图" class="result-img">
+            <p>Arduino IDE程序编写与上传界面，展示开发调试过程。</p>
+
+            <h3>LED闪烁程序运行效果</h3>
+            <video src="图片视频/呼吸灯运行效果.mp4" alt="LED闪烁运行效果" class="result-img" controls muted loop preload="metadata"></video>
+            <p>基于Arduino IDE编写的LED闪烁程序运行效果，LED按照1秒间隔交替亮灭。</p>
+
+            <hr>
+
+            <h2>2. ESP32开发板的基础功能与应用</h2>
+            <p>学习ESP32开发板核心功能的使用方法，掌握数字/模拟I/O、串口、WIFI、舵机等基础模块的控制逻辑。</p>
+
+            <h3>① 串口通信：Serial.begin()/Serial.print() 实现数据打印与调试</h3>
+            <h4>串口打印代码：</h4>
+            <div class="code-block">
+//打开串口查看器，你能看到从esp32发给你的文本问候。
+
+void setup() {
+  // put your setup code here, to run once:
+  //打开串口，设置波特率115200
+  Serial.begin(115200);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+  Serial.println("helloworld!");
+  delay(500);
+}
+            </div>
+            <a href="源文件/helloworld.ino" class="download-link" download target="_blank">串口打印源文件（ino）</a>
+            <video src="图片视频/串口打印运行效果.mp4" class="result-img" controls muted loop preload="metadata"></video>
+
+            <h3>② 数字输出/输入：pinMode()、digitalWrite()、digitalRead() 控制LED/按键</h3>
+            <h4>数字输出代码：</h4>
+            <div class="code-block">
+#define LEDPIN 8
+void setup() {
+   pinMode(LEDPIN,OUTPUT);
+}
+
+void loop() {
+  digitalWrite(LEDPIN,HIGH);
+  delay(100);
+  digitalWrite(LEDPIN,LOW);
+  delay(100);
+}
+            </div>
+            <a href="源文件/digitalwrite.ino" class="download-link" download target="_blank">数字输出源文件（ino）</a>
+            <video src="图片视频/数字输出运行效果.mp4" class="result-img" controls muted loop preload="metadata"></video>
+
+            <h4>数字输入代码：</h4>
+            <div class="code-block">
+#define BUTTONPIN 40
+
+//初始化一个全局变量，用来存储按钮的状态。
+int in;
+
+void setup() {
+  // put your setup code here, to run once:
+  //设置端口为输入。
+  pinMode(BUTTONPIN,INPUT);
+  //以9600波特率，打开串口
+  Serial.begin(9600);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  //数字读设置好的端口，存到in。
+  in = digitalRead(BUTTONPIN);
+  //串口输出in（也就是发送给电脑），这样在电脑上的Arduino IDE上可以看到in的结果了。
+  Serial.println(in);
+  //延迟以下，等待硬件执行
+  delay(100);
+}
+            </div>
+            <a href="源文件/digitalread.ino" class="download-link" download target="_blank">数字输入源文件（ino）</a>
+            <video src="图片视频/数字输入运行效果.mp4" class="result-img" controls muted loop preload="metadata"></video>
+
+            <h3>③ 模拟输入/输出：analogRead()（读取电位器）、analogWrite()（PWM控制）</h3>
+            <h4>模拟输入代码：</h4>
+            <div class="code-block">
+#define APIN 4
+int in;
+
+void setup() {
+  // put your setup code here, to run once:
+  //打开串口，设置波特率115200
+  Serial.begin(115200);
+  //set the resolution to 12 bits (0-4096)
+  analogReadResolution(12);
+}
+
+void loop() {
+  //从模拟端口读取电压采样值
+  in = analogRead(APIN);
+  //把收到的数据（存在in里面）发出去。
+  Serial.println(in);
+  delay(100);
+}
+            </div>
+            <a href="源文件/analogread.ino" class="download-link" download target="_blank">模拟输入源文件（ino）</a>
+            <video src="图片视频/模拟输入运行效果.mp4" class="result-img" controls muted loop preload="metadata"></video>
+
+            <h4>模拟输出代码：</h4>
+            <div class="code-block">
+#define APIN 40
+
+void setup() {
+   //设置分辨率
+   analogWriteResolution(10);
+}
+
+void loop() {
+  //输出
+   analogWrite(APIN,1023);
+   delay(100);
+   analogWrite(APIN,768);
+   delay(100);
+   analogWrite(APIN,512);
+   delay(100);
+   analogWrite(APIN,256);
+   delay(100);
+   analogWrite(APIN,128);
+   delay(100);
+   analogWrite(APIN,64);
+   delay(100);
+}
+            </div>
+            <a href="源文件/analogwrite.ino" class="download-link" download target="_blank">模拟输出源文件（ino）</a>
+            <video src="图片视频/模拟输出运行效果.mp4" class="result-img" controls muted loop preload="metadata"></video>
+
+            <h3>④ WIFI功能：连接本地网络、TCP/UDP通信、HTTP请求（基础模板）</h3>
+            <h4>WiFi控制LED亮灭代码</h4>
+            <div class="code-block">
+#include &lt;WiFi.h&gt;
+
+const char *ssid = "chen iQOO Z10x";
+const char *password = "Lcyyc9426";
+
+WiFiServer server(80);
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(15, OUTPUT);  // set the LED pin mode
+
+  delay(10);
+
+  // We start by connecting to a WiFi network
+  Serial.println();
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected.");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  server.begin();
+}
+
+void loop() {
+  WiFiClient client = server.accept();  // listen for incoming clients
+
+  if (client) {                     // if you get a client,
+    Serial.println("New Client.");  // print a message out the serial port
+    String currentLine = "";        // make a String to hold incoming data from the client
+    while (client.connected()) {    // loop while the client's connected
+      if (client.available()) {     // if there's bytes to read from the client,
+        char c = client.read();     // read a byte, then
+        Serial.write(c);            // print it out the serial monitor
+        if (c == '\n') {            // if the byte is a newline character
+
+          // if the current line is blank, you got two newline characters in a row.
+          // that's the end of the client HTTP request, so send a response:
+          if (currentLine.length() == 0) {
+            // HTTP headers
+            client.println("HTTP/1.1 200 OK");
+            client.println("Content-type:text/html");
+            client.println();
+
+            // the content of the HTTP response
+            client.print("Click &lt;a href=\"/H\"&gt;here&lt;/a&gt; to turn the LED on pin 15 on.&lt;br&gt;");
+            client.print("Click &lt;a href=\"/L\"&gt;here&lt;/a&gt; to turn the LED on pin 15 off.&lt;br&gt;");
+
+            client.println();
+            break;
+          } else {
+            currentLine = "";
+          }
+        } else if (c != '\r') {
+          currentLine += c;
+        }
+
+        // Check to see if the client request was "GET /H" or "GET /L":
+        if (currentLine.endsWith("GET /H")) {
+          digitalWrite(15, HIGH);
+        }
+        if (currentLine.endsWith("GET /L")) {
+          digitalWrite(15, LOW);
+        }
+      }
+    }
+    client.stop();
+    Serial.println("Client Disconnected.");
+  }
+}
+            </div>
+            <a href="源文件/WiFi_LED.ino" class="download-link" download target="_blank">WiFi控制LED源文件（ino）</a>
+            <video src="图片视频/WiFi控制灯亮灭运行效果.mp4" class="result-img" controls muted loop preload="metadata"></video>
+
+            <h3>⑤ 舵机控制：Servo库使用、角度控制与精准定位</h3>
+            <h4>舵机角度控制代码（0°-90°往复摆动）</h4>
+            <div class="code-block">
+#include &lt;ESP32Servo.h&gt;
+
+Servo myservo;  // create servo object to control a servo
+// 16 servo objects can be created on the ESP32
+
+int pos = 0;    // variable to store the servo position
+int servoPin = 5;
+
+void setup() {
+    ESP32PWM::allocateTimer(0);
+    ESP32PWM::allocateTimer(1);
+    ESP32PWM::allocateTimer(2);
+    ESP32PWM::allocateTimer(3);
+    myservo.setPeriodHertz(50);    // standard 50 hz servo
+    myservo.attach(servoPin, 500, 2500);
+    myservo.write(0);
+}
+
+void loop() {
+    for (pos = 0; pos &lt;= 90; pos += 1) {
+        myservo.write(pos);
+        delay(15);
+    }
+    for (pos = 90; pos &gt;= 0; pos -= 1) {
+        myservo.write(pos);
+        delay(15);
+    }
+}
+            </div>
+            <a href="源文件/Esp32Servo.ino" class="download-link" download target="_blank">舵机控制源文件（ino）</a>
+            <video src="图片视频/舵机.mp4" class="result-img" controls muted loop preload="metadata"></video>
+            <p>基于ESP32Servo库实现舵机0°-90°往复摆动控制，通过PWM信号精准控制舵机角度，延迟15ms保证舵机稳定到达指定位置。</p>
+
+            <hr>
+
+            <h2>3. 嵌入式编程练习：双按键智能光控系统（WiFi+舵机+光敏+按键+LED）</h2>
+            <p>利用ESP32开发板融合 <strong>WiFi通信、舵机控制、模拟输入（光敏）、数字输入（按键）、数字输出（LED）</strong> 多模块功能，实现「自动/手动双模」智能光控系统：</p>
+            <ul>
+                <li>自动模式：根据光敏传感器数值自动控制LED亮灭+舵机转向</li>
+                <li>手动模式：通过物理按键/WiFi网页控制LED亮灭+舵机转向</li>
+                <li>按键消抖、光敏滤波：提升硬件交互稳定性</li>
+                <li>串口实时打印状态：便于调试</li>
+            </ul>
+
+            <h3>硬件接线说明</h3>
+            <div class="hardware-wiring">
+                <ul>
+                    <li>光敏传感器 → ESP32 GPIO2（模拟输入）</li>
+                    <li>舵机信号线 → ESP32 GPIO5（PWM输出）</li>
+                    <li>LED正极 → ESP32 GPIO7（数字输出，需串220Ω电阻），负极→GND</li>
+                    <li>模式切换按键 → ESP32 GPIO8（上拉输入），另一端→GND</li>
+                    <li>手动开关灯按键 → ESP32 GPIO12（上拉输入），另一端→GND</li>
+                    <li>ESP32 5V→外设供电，GND→外设GND（共地）</li>
+                </ul>
+            </div>
+
+            <h3>综合实现代码</h3>
+            <div class="code-block">
+#include &lt;WiFi.h&gt;
+
+// ===================== 【可修改配置】 =====================
+const char *ssid = "chen iQOO Z10x";
+const char *password = "Lcyyc9426";
+
+#define PHOTO_PIN     2
+#define SERVO_PIN     5
+#define LED_PIN       7
+#define KEY_MODE_PIN  8     // 模式切换按键（自动/手动）
+#define KEY_MANUAL_PIN 12    // 手动模式开关灯按键
+#define LOW_THRESHOLD  2000
+#define HIGH_THRESHOLD 3500
+// ====================================================================
+
+#define LEDC_FREQ     50
+#define LEDC_RES      12
+#define SERVO_RIGHT   340
+#define SERVO_LEFT    100
+#define SERVO_STOP    205
+
+WiFiServer server(80);
+int photoValue = 0;
+bool manualMode = false;
+bool lightState = false;
+
+// 按键消抖通用函数
+bool readKey(int pin, bool &amp;lastState, unsigned long &amp;debounceTime) {
+  int reading = digitalRead(pin);
+  bool keyPress = false;
+  if (reading != lastState) {
+    debounceTime = millis();
+  }
+  if (millis() - debounceTime &gt; 80) {
+    if (reading == LOW) {
+      keyPress = true;
+    }
+  }
+  lastState = reading;
+  return keyPress;
+}
+
+// 光敏滤波
+int readPhoto() {
+  int sum = 0;
+  for (int i = 0; i &lt; 5; i++) {
+    sum += analogRead(PHOTO_PIN);
+    delay(5);
+  }
+  return sum / 5;
+}
+
+// 灯光控制（舵机+LED）
+void setLight(bool on) {
+  if (on) {
+    ledcWrite(SERVO_PIN, SERVO_RIGHT);
+    digitalWrite(LED_PIN, HIGH);
+    lightState = true;
+  } else {
+    ledcWrite(SERVO_PIN, SERVO_LEFT);
+    digitalWrite(LED_PIN, LOW);
+    lightState = false;
+  }
+}
+
+bool lastModeKeyState = HIGH;
+unsigned long modeDebounceTime = 0;
+bool lastManualKeyState = HIGH;
+unsigned long manualDebounceTime = 0;
+
+void setup() {
+  Serial.begin(115200);
+  ledcAttach(SERVO_PIN, LEDC_FREQ, LEDC_RES);
+  ledcWrite(SERVO_PIN, SERVO_STOP);
+
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW);
+  pinMode(KEY_MODE_PIN, INPUT_PULLUP);
+  pinMode(KEY_MANUAL_PIN, INPUT_PULLUP);
+
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(50);
+    Serial.print(".");
+  }
+  Serial.println("\nWiFi连接成功");
+  Serial.print("IP: ");
+  Serial.println(WiFi.localIP());
+  server.begin();
+}
+
+void loop() {
+  photoValue = readPhoto();
+
+  if (readKey(KEY_MODE_PIN, lastModeKeyState, modeDebounceTime)) {
+    manualMode = !manualMode;
+    Serial.println("=== 按键切换模式 ===");
+  }
+
+  if (manualMode &amp;&amp; readKey(KEY_MANUAL_PIN, lastManualKeyState, manualDebounceTime)) {
+    lightState = !lightState;
+    setLight(lightState);
+  }
+
+  if (!manualMode) {
+    if (photoValue &lt; LOW_THRESHOLD) {
+      setLight(true);
+    } else if (photoValue &gt; HIGH_THRESHOLD) {
+      setLight(false);
+    }
+  }
+
+  Serial.print("模式:");
+  Serial.print(manualMode ? "手动" : "自动");
+  Serial.print(" | 光敏:");
+  Serial.print(photoValue);
+  Serial.print(" | LED:");
+  Serial.println(digitalRead(LED_PIN) ? "亮" : "灭");
+
+  WiFiClient client = server.accept();
+  if (client) {
+    String req = client.readStringUntil('\r');
+    client.flush();
+
+    if (req.indexOf("/R") != -1) { manualMode = true; setLight(true); }
+    if (req.indexOf("/L") != -1) { manualMode = true; setLight(false); }
+    if (req.indexOf("/A") != -1) { manualMode = false; }
+    if (req.indexOf("/M") != -1) { manualMode = true; }
+
+    client.println("HTTP/1.1 200 OK");
+    client.println("Content-type:text/html; charset=utf-8");
+    client.println();
+    client.println("&lt;h1&gt;双按键智能光控系统&lt;/h1&gt;");
+    client.println("&lt;p&gt;模式：" + String(manualMode ? "手动" : "自动") + "&lt;/p&gt;");
+    client.println("&lt;p&gt;光敏值：" + String(photoValue) + "&lt;/p&gt;");
+    client.println("&lt;p&gt;LED：" + String(digitalRead(LED_PIN) ? "亮" : "灭") + "&lt;/p&gt;");
+    client.println("&lt;p&gt;&lt;a href='/R'&gt;开灯&lt;/a&gt; &lt;a href='/L'&gt;关灯&lt;/a&gt; &lt;a href='/M'&gt;手动模式&lt;/a&gt; &lt;a href='/A'&gt;自动模式&lt;/a&gt;&lt;/p&gt;");
+
+    client.stop();
+  }
+
+  delay(50);
+}
+            </div>
+            <a href="源文件/zuoye.ino" class="download-link" download target="_blank">智能光控系统源文件（ino）</a>
+
+            <h3>运行效果展示</h3>
+            <video src="图片视频/嵌入式练习作业演示视频.mp4" class="result-img" controls muted loop preload="metadata"></video>
+
+            <p>系统运行逻辑：<br>
+            1. 上电后自动连接WiFi，串口打印IP地址；<br>
+            2. 自动模式：光敏值&lt;2000（环境暗）→LED亮+舵机右转；光敏值&gt;3500（环境亮）→LED灭+舵机左转；<br>
+            3. 手动模式：按GPIO12按键切换LED/舵机状态；<br>
+            4. 网页控制：访问ESP32的IP地址，可一键切换模式/控制灯光；<br>
+            5. 串口实时打印模式、光敏值、LED状态，便于调试。</p>
+
+            <h3>练习拓展与常见问题</h3>
+            <ul>
+                <li>拓展1：调整光敏阈值（LOW_THRESHOLD/HIGH_THRESHOLD）适配不同光照环境</li>
+                <li>拓展2：增加舵机角度自定义配置，适配不同舵机型号</li>
+                <li>拓展3：添加LED亮度PWM调节，实现呼吸灯效果</li>
+                <li>问题1：WiFi连接失败 → 检查SSID/password是否正确、ESP32是否在WiFi覆盖范围</li>
+                <li>问题2：按键无响应 → 检查上拉输入配置、按键接线是否正确、消抖延时是否合理</li>
+                <li>问题3：舵机抖动 → 增加PWM分辨率/频率稳定性、优化供电（建议外接5V电源）</li>
+                <li>问题4：光敏值波动大 → 增加滤波次数（readPhoto函数中循环次数）、屏蔽环境光干扰</li>
+            </ul>
+
+        </div>
+
+        <a href="index.html" class="back-btn">← 返回日志主页</a>
+    </div>
+</body>
+</html>

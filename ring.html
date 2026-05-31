@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个性戒指设计 - 课程日志</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --surface: #f8fafc;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --blue: #2563eb;
+            --blue-hover: #1d4ed8;
+            --blue-light: #eff6ff;
+            --green: #059669;
+            --green-hover: #047857;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(37,99,235,0.04) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 90%, rgba(5,150,105,0.04) 0%, transparent 60%);
+            animation: bgShift 12s ease-in-out infinite alternate;
+        }
+        @keyframes bgShift { 0% { opacity: 0.6; } 100% { opacity: 1; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .container { max-width: 840px; margin: 0 auto; padding: 48px 24px 64px; }
+        .header { text-align: center; margin-bottom: 40px; animation: fadeInUp 0.7s ease-out; }
+        .header h1 { font-size: clamp(1.4rem, 4vw, 1.85rem); font-weight: 700; color: var(--text); letter-spacing: -0.02em; margin-bottom: 8px; }
+        .content-block {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            animation: fadeInUp 0.6s ease-out both;
+        }
+        .content-block:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .content-block h2 { font-size: 1.15rem; font-weight: 600; color: var(--blue); margin: 24px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--blue-light); display: flex; align-items: center; gap: 8px; }
+        .content-block h2:first-child { margin-top: 0; }
+        .content-block h2::before { content: ''; display: inline-block; width: 4px; height: 20px; background: var(--blue); border-radius: 2px; }
+        .content-block h3 { font-size: 1.02rem; font-weight: 600; color: var(--text); margin: 20px 0 8px; }
+        .content-block p { margin-bottom: 12px; font-size: 0.96rem; }
+        .content-block ul { padding-left: 20px; margin-bottom: 12px; }
+        .content-block li { margin: 6px 0; font-size: 0.94rem; }
+        .result-img { width: 100%; max-width: 600px; border-radius: var(--radius-sm); box-shadow: var(--shadow); margin: 8px 0 20px; display: block; object-fit: contain; transition: box-shadow 0.3s ease; }
+        .result-img:hover { box-shadow: var(--shadow-md); }
+        .result-video { width: 100%; max-width: 600px; border-radius: var(--radius-sm); box-shadow: var(--shadow); margin: 8px 0 20px; display: block; }
+        .download-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            margin: 6px 0 16px; padding: 10px 20px;
+            background: var(--green); color: #fff; text-decoration: none;
+            border-radius: var(--radius-sm); font-size: 0.9rem; font-weight: 500;
+            transition: all 0.25s ease;
+        }
+        .download-link:hover { background: var(--green-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(5,150,105,0.3); }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            margin-top: 8px; padding: 12px 24px;
+            background: var(--blue); color: #fff; text-decoration: none;
+            border-radius: var(--radius-sm); font-size: 0.95rem; font-weight: 500;
+            transition: all 0.25s ease;
+            animation: fadeInUp 0.6s 0.3s ease-out both;
+        }
+        .back-btn:hover { background: var(--blue-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+        @media (max-width: 640px) { .container { padding: 24px 16px 40px; } .content-block { padding: 20px; } .result-img, .result-video { max-width: 100%; } .back-btn { width: 100%; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header"><h1>个性戒指（凸雕刻字）—— Autodesk Fusion 的使用</h1></div>
+        <div class="content-block">
+            <p>学习使用Autodesk Fusion 360进行3D建模，完成个性化凸雕刻字戒指设计，为3D打印做准备。</p>
+            <p><strong>本次学习内容：</strong></p>
+            <ul>
+                <li>Fusion 360 界面认知与基础操作</li>
+                <li>环形基础体建模、尺寸参数调整</li>
+                <li>文本创建与凸雕效果设计技巧</li>
+                <li>模型细节优化与倒角处理</li>
+                <li>3D 打印文件导出格式（STL）设置</li>
+                <li>模型检查与打印可行性分析</li>
+            </ul>
+
+            <h2>结果展示</h2>
+
+            <h3>1. 戒指3D模型效果图</h3>
+            <img src="图片视频/ring_model.png" alt="个性戒指3D建模效果图" class="result-img">
+            <p>完成戒指建模、凸雕刻字、倒角优化后的最终3D效果展示。</p>
+
+            <h3>2. 设计过程演示视频</h3>
+            <video class="result-video" controls muted preload="metadata">
+                <source src="图片视频/ring_demo.mp4" type="video/mp4">
+                您的浏览器不支持视频播放
+            </video>
+            <p>视频包含：Fusion 360 建模全过程、文字雕刻演示。</p>
+
+            <h3>3. 源文件下载</h3>
+            <a href="源文件/个性戒指.stl" class="download-link">个性戒指STL文件</a>
+            <p>包含可直接用于Bambu Studio打印的模型源文件。</p>
+        </div>
+        <a href="index.html" class="back-btn">← 返回日志主页</a>
+    </div>
+</body>
+</html>

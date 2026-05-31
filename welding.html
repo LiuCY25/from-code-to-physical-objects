@@ -5,83 +5,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>电子焊接入门 - 课程日志</title>
     <style>
+        :root {
+            --bg: #ffffff;
+            --surface: #f8fafc;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --blue: #2563eb;
+            --blue-hover: #1d4ed8;
+            --blue-light: #eff6ff;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 40px;
-            background-color: #f5f5f5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(37,99,235,0.04) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 90%, rgba(5,150,105,0.04) 0%, transparent 60%);
+            animation: bgShift 12s ease-in-out infinite alternate;
         }
-        h1 {
-            text-align: center;
-            font-size: 28px;
-            margin-bottom: 10px;
-            color: #333;
+        @keyframes bgShift { 0% { opacity: 0.6; } 100% { opacity: 1; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .container { max-width: 840px; margin: 0 auto; padding: 48px 24px 64px; }
+        .header { text-align: center; margin-bottom: 40px; animation: fadeInUp 0.7s ease-out; }
+        .header h1 { font-size: clamp(1.4rem, 4vw, 1.85rem); font-weight: 700; color: var(--text); letter-spacing: -0.02em; margin-bottom: 8px; }
+        .content-block {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            animation: fadeInUp 0.6s ease-out both;
         }
-        .content {
-            margin: 30px 0;
-            line-height: 1.6;
-        }
-        ul li, ol li {
-            margin: 8px 0;
-        }
+        .content-block:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .content-block h2 { font-size: 1.15rem; font-weight: 600; color: var(--blue); margin: 24px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--blue-light); display: flex; align-items: center; gap: 8px; }
+        .content-block h2:first-child { margin-top: 0; }
+        .content-block h2::before { content: ''; display: inline-block; width: 4px; height: 20px; background: var(--blue); border-radius: 2px; }
+        .content-block h3 { font-size: 1.02rem; font-weight: 600; color: var(--text); margin: 20px 0 8px; }
+        .content-block p { margin-bottom: 12px; font-size: 0.96rem; }
+        .content-block ul, .content-block ol { padding-left: 20px; margin-bottom: 12px; }
+        .content-block li { margin: 6px 0; font-size: 0.94rem; }
+        .result-img { width: 100%; max-width: 600px; border-radius: var(--radius-sm); box-shadow: var(--shadow); margin: 8px 0 20px; display: block; object-fit: contain; transition: box-shadow 0.3s ease; }
+        .result-img:hover { box-shadow: var(--shadow-md); }
         .back-btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: #2d8cf0;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
+            display: inline-flex; align-items: center; gap: 6px;
+            margin-top: 8px; padding: 12px 24px;
+            background: var(--blue); color: #fff; text-decoration: none;
+            border-radius: var(--radius-sm); font-size: 0.95rem; font-weight: 500;
+            transition: all 0.25s ease;
+            animation: fadeInUp 0.6s 0.3s ease-out both;
         }
-        .back-btn:hover {
-            background: #1b7acc;
-        }
-
-        /* 结果展示样式 */
-        .result-section {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 2px solid #eee;
-        }
-        .result-section h2 {
-            color: #444;
-            margin-bottom: 20px;
-        }
-        .result-img {
-            width: 100%;
-            max-width: 600px;
-            border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin: 10px 0 25px 0;
-        }
-        /* AI项目板块样式 */
-        .ai-project {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 6px;
-        }
-        .ai-dialog {
-            margin-top: 15px;
-            padding: 15px;
-            background-color: #fff;
-            border: 1px solid #eee;
-            border-radius: 4px;
-        }
+        .back-btn:hover { background: var(--blue-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+        @media (max-width: 640px) { .container { padding: 24px 16px 40px; } .content-block { padding: 20px; } .result-img { max-width: 100%; } .back-btn { width: 100%; justify-content: center; } }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>电子焊接入门</h1>
-        <div class="content">
+        <div class="header"><h1>电子焊接入门</h1></div>
+        <div class="content-block">
             <h2>一、课堂总结报告</h2>
             <h3>1. 焊接过程简要说明</h3>
             <p>本次电子焊接学习以基础通孔焊接为核心，完成了简易LED电路的焊接实操。从工具准备、材料检查开始，遵循焊接五步法完成元器件焊接，最后对焊点进行质量检测与修正，全程注重操作规范和安全防护。</p>
@@ -104,29 +101,27 @@
 
             <h3>4. 遇到的具体困难及解决方法</h3>
             <ul>
-                <li>困难1：烙铁头温度过高，导致焊锡融化过快，出现“虚焊”（焊点不牢固）
+                <li>困难1：烙铁头温度过高，导致焊锡融化过快，出现"虚焊"（焊点不牢固）
                     <br>解决方法：将烙铁温度降至360℃，缩短加热时间，焊接前在烙铁头沾少量松香，提升焊锡流动性</li>
-                <li>困难2：焊锡量过多，形成“包焊”（焊点过大，易短路）
-                    <br>解决方法：使用吸锡器吸除多余焊锡，练习“少量多次”送锡，借助镊子辅助控制焊锡范围</li>
+                <li>困难2：焊锡量过多，形成"包焊"（焊点过大，易短路）
+                    <br>解决方法：使用吸锡器吸除多余焊锡，练习"少量多次"送锡，借助镊子辅助控制焊锡范围</li>
                 <li>困难3：LED灯珠正负极接反，焊接后无法点亮
                     <br>解决方法：焊接前标记LED长脚（正极）对应PCB丝印方向，焊接后用万用表检测通断，拆焊后重新焊接</li>
             </ul>
 
             <h3>5. 焊点质量评价</h3>
             <p>整体焊点合格率约85%：<br>
-            ✅ 合格焊点：焊锡呈亮银色，均匀包裹引脚，与焊盘结合紧密，无气泡、无尖刺，引脚与焊盘无脱离；<br>
-            ❌ 不合格焊点：约15%的焊点存在轻微虚焊（焊点表面发暗）、少量焊锡堆积，已通过补焊、吸锡重新修正；<br>
+            合格焊点：焊锡呈亮银色，均匀包裹引脚，与焊盘结合紧密，无气泡、无尖刺，引脚与焊盘无脱离；<br>
+            不合格焊点：约15%的焊点存在轻微虚焊（焊点表面发暗）、少量焊锡堆积，已通过补焊、吸锡重新修正；<br>
             改进方向：提升烙铁加热时间的把控精度，减少手抖导致的焊锡偏移，加强焊接后的目视检测。</p>
 
-            <h2 class="result-section">二、焊接成果展示</h2>
+            <h2>二、焊接成果展示</h2>
             <img src="图片视频/焊接3.jpg" alt="闷焊、电阻焊接成品" class="result-img">
             <img src="图片视频/焊接4.jpg" alt="闷焊、电阻焊接成品" class="result-img">
             <img src="图片视频/焊接1.jpg" alt="ESP32焊接成品" class="result-img">
             <img src="图片视频/焊接2.jpg" alt="ESP32焊接成品" class="result-img">
         </div>
-
-        <!-- 返回主页按钮 -->
-        <a href="index.html" class="back-btn">返回日志主页</a>
+        <a href="index.html" class="back-btn">← 返回日志主页</a>
     </div>
 </body>
 </html>

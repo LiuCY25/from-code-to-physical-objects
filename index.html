@@ -5,93 +5,282 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>个人日志</title>
     <style>
+        :root {
+            --bg: #ffffff;
+            --surface: #f8fafc;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --blue: #2563eb;
+            --blue-hover: #1d4ed8;
+            --blue-light: #eff6ff;
+            --green: #059669;
+            --green-hover: #047857;
+            --green-light: #ecfdf5;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 40px;
-            background-color: #f5f5f5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
         }
+
+        /* ── Animated background gradient ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(37,99,235,0.04) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 90%, rgba(5,150,105,0.04) 0%, transparent 60%);
+            animation: bgShift 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgShift {
+            0% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        /* ── Container ── */
         .container {
-            max-width: 800px;
+            max-width: 840px;
             margin: 0 auto;
-            background-color: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 48px 24px 64px;
         }
-        h1 {
+
+        /* ── Header ── */
+        .header {
             text-align: center;
-            font-size: 28px;
-            margin-bottom: 10px;
-            color: #333;
+            margin-bottom: 48px;
+            animation: fadeInUp 0.7s ease-out;
         }
-        .date {
-            text-align: center;
-            font-size: 20px;
-            color: #666;
-            margin-bottom: 30px;
+
+        .header h1 {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
         }
+
+        .header .date {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            position: relative;
+            display: inline-block;
+        }
+
+        .header .date::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 32px;
+            height: 3px;
+            border-radius: 2px;
+            background: var(--blue);
+            animation: expandBar 0.6s 0.4s ease-out both;
+        }
+
+        @keyframes expandBar {
+            from { width: 0; }
+            to { width: 32px; }
+        }
+
+        /* ── Section Cards ── */
         .section {
-            margin: 30px 0;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            animation: fadeInUp 0.6s ease-out both;
         }
-        h2 {
-            color: #444;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 8px;
+
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+        .section:nth-child(4) { animation-delay: 0.4s; }
+
+        .section:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
         }
-        ol li {
-            margin: 12px 0;
-            font-size: 16px;
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        a {
-            color: #2d8cf0;
+
+        .section h2 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--blue);
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--blue-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section h2::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background: var(--blue);
+            border-radius: 2px;
+        }
+
+        .section p { color: var(--text); font-size: 0.98rem; }
+
+        /* ── Link List ── */
+        .link-list {
+            list-style: none;
+            display: grid;
+            gap: 4px;
+        }
+
+        .link-list li { counter-increment: item; }
+
+        .link-list li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            color: var(--text);
             text-decoration: none;
+            font-size: 0.98rem;
+            transition: all 0.25s ease;
+            position: relative;
         }
-        a:hover {
-            text-decoration: underline;
+
+        .link-list li a::before {
+            content: counter(item, decimal-leading-zero);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--blue);
+            min-width: 24px;
         }
-        .back-home {
-            text-align: center;
-            margin-top: 30px;
+
+        .link-list li a:hover {
+            background: var(--blue-light);
+            color: var(--blue);
+            transform: translateX(4px);
+        }
+
+        .link-list li a::after {
+            content: '→';
+            margin-left: auto;
+            opacity: 0;
+            transform: translateX(-8px);
+            transition: all 0.25s ease;
+            color: var(--blue);
+        }
+
+        .link-list li a:hover::after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* ── Project cards (green accent) ── */
+        .section.projects .link-list li a::before { color: var(--green); }
+        .section.projects .link-list li a:hover {
+            background: var(--green-light);
+            color: var(--green);
+        }
+        .section.projects .link-list li a::after { color: var(--green); }
+        .section.projects h2 {
+            color: var(--green);
+            border-bottom-color: var(--green-light);
+        }
+        .section.projects h2::before { background: var(--green); }
+
+        /* ── About info ── */
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .about-item {
+            background: var(--surface);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 0.93rem;
+        }
+
+        .about-item strong {
+            display: block;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .container { padding: 24px 16px 40px; }
+            .section { padding: 20px; }
+            .section h2 { font-size: 1.05rem; }
+            .link-list li a { padding: 10px 12px; font-size: 0.9rem; }
+            .about-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>《从代码到实物：造你所想》课程 个人日志</h1>
-        <div class="date">2026年 春季</div>
+        <div class="header">
+            <h1>《从代码到实物：造你所想》课程 个人日志</h1>
+            <div class="date">2026年 春季</div>
+        </div>
 
-        <!-- 关于我板块 -->
         <div class="section">
             <h2>关于我</h2>
-            <p>姓名：刘宸宇<br>
-            学号：2024114246<br>
-            专业：计算机科学与技术</p>
+            <div class="about-grid">
+                <div class="about-item"><strong>姓名</strong>刘宸宇</div>
+                <div class="about-item"><strong>学号</strong>2024114246</div>
+                <div class="about-item"><strong>专业</strong>计算机科学与技术</div>
+            </div>
         </div>
-        
-        <!-- 新增：什么是创客 板块 -->
+
         <div class="section">
             <h2>什么是创客</h2>
-            <p>作为一名计算机专业的大学生，我理解的创客并非单纯的“动手爱好者”，而是以创新为核心、以实践为路径的创造者。创客精神在于不满足于现有知识的吸收，更强调将想法落地——从脑海中的创意，到用代码、工具、材料将其转化为具体的实物或应用。在大学阶段，创客思维让我们跳出课本的框架，把课堂学到的编程、建模、焊接等技能融合起来，解决真实的小问题，比如设计校庆文创、制作智能小装置。创客也不是孤军奋战，而是乐于分享、协作，在尝试与试错中积累经验，哪怕是一次失败的3D打印、一段调试不通的代码，都是创客成长的一部分。这种“敢想敢造、知行合一”的态度，正是大学生创客最珍贵的特质。</p>
+            <p>作为一名计算机专业的大学生，我理解的创客并非单纯的"动手爱好者"，而是以创新为核心、以实践为路径的创造者。创客精神在于不满足于现有知识的吸收，更强调将想法落地——从脑海中的创意，到用代码、工具、材料将其转化为具体的实物或应用。在大学阶段，创客思维让我们跳出课本的框架，把课堂学到的编程、建模、焊接等技能融合起来，解决真实的小问题，比如设计校庆文创、制作智能小装置。创客也不是孤军奋战，而是乐于分享、协作，在尝试与试错中积累经验，哪怕是一次失败的3D打印、一段调试不通的代码，都是创客成长的一部分。这种"敢想敢造、知行合一"的态度，正是大学生创客最珍贵的特质。</p>
         </div>
-        
-        <!-- 本学期课程内容板块（链接跳转到独立页面） -->
+
         <div class="section">
             <h2>本学期课程内容（学习过程）</h2>
-            <ol>
+            <ol class="link-list">
                 <li><a href="git.html">关于Git</a></li>
                 <li><a href="ring.html">个性戒指（凸雕刻字）—— Autodesk Fusion 的使用</a></li>
                 <li><a href="3dprint.html">3D打印与校庆文创设计——Bambu Studio的使用</a></li>
                 <li><a href="welding.html">电子焊接入门</a></li>
                 <li><a href="arduino.html">嵌入式编程入门——Arduino IDE的使用</a></li>
                 <li><a href="pcb.html">PCB设计与制作——嘉立创EDA的使用</a></li>
+                <li><a href="laser.html">激光切割入门——EagleWorks的使用</a></li>
             </ol>
         </div>
 
-        <!-- 新增：创客与创新项目 板块 -->
-        <div class="section">
+        <div class="section projects">
             <h2>创客与创新项目</h2>
-            <ol>
+            <ol class="link-list">
                 <li><a href="midterm-project.html">中期创客项目</a></li>
                 <li><a href="final-project.html">期末创新项目</a></li>
             </ol>

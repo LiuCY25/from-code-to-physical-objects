@@ -1,88 +1,983 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>期末创新项目 - 课程日志</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 40px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        h1 {
-            text-align: center;
-            font-size: 28px;
-            margin-bottom: 10px;
-            color: #333;
-        }
-        .content {
-            margin: 30px 0;
-            line-height: 1.6;
-        }
-        h2 {
-            color: #444;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 8px;
-            margin-top: 30px;
-        }
-        ul li {
-            margin: 8px 0;
-        }
-        .back-btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: #2d8cf0;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-        }
-        .back-btn:hover {
-            background: #1b7acc;
-        }
-        .placeholder {
-            border: 2px dashed #ccc;
-            background-color: #fafafa;
-            padding: 40px 20px;
-            text-align: center;
-            color: #666;
-            margin: 10px 0 25px 0;
-            border-radius: 6px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>期末创新项目 — 舵机驱动空气质量检测遥控小车</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --red: #f85149;
+    --yellow: #d2991d;
+    --orange: #db6d28;
+    --purple: #a371f7;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
+    line-height: 1.7;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+  h1 { font-size: 2em; text-align: center; margin-bottom: 8px; color: #fff; }
+  h2 {
+    font-size: 1.35em;
+    color: #fff;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 8px;
+    margin: 48px 0 24px;
+  }
+  h3 {
+    font-size: 1.1em;
+    color: var(--accent);
+    margin: 28px 0 12px;
+  }
+  h4 { font-size: 1em; color: var(--yellow); margin: 20px 0 8px; }
+
+  /* ===== Project Profile ===== */
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 24px 0;
+  }
+  .profile-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+  }
+  .profile-card.full { grid-column: 1 / -1; }
+  .profile-card h3 { margin-top: 0; }
+  .profile-card .label { color: var(--muted); font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.5px; }
+  .profile-card .value { font-size: 1.15em; margin-top: 4px; }
+  .profile-card .oneliner {
+    font-size: 1.2em;
+    color: var(--green);
+    font-style: italic;
+    text-align: center;
+    padding: 8px 0;
+  }
+  .member { margin-bottom: 10px; }
+  .member .name { font-weight: 600; color: #fff; }
+  .member .role { color: var(--muted); font-size: 0.9em; margin-left: 4px; }
+  .member .contrib { color: var(--text); font-size: 0.92em; margin-top: 2px; }
+
+  /* ===== Timeline ===== */
+  .timeline { position: relative; padding-left: 32px; margin: 24px 0; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+  .tl-day {
+    position: relative;
+    margin-bottom: 36px;
+  }
+  .tl-day::before {
+    content: '';
+    position: absolute;
+    left: -25px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+    z-index: 1;
+  }
+  .tl-day.afternoon::before { background: var(--orange); }
+  .tl-day.morning::before { background: var(--purple); }
+  .tl-label {
+    font-weight: 700;
+    font-size: 1.05em;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .tl-slot {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+  .tl-slot .time {
+    color: var(--muted);
+    font-size: 0.83em;
+    margin-bottom: 6px;
+  }
+  .tl-slot p { margin-bottom: 8px; }
+  .tl-slot .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.78em;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+  .tag.fail { background: rgba(248,81,73,0.15); color: var(--red); }
+  .tag.ok   { background: rgba(63,185,80,0.15); color: var(--green); }
+  .tag.warn { background: rgba(210,153,29,0.15); color: var(--yellow); }
+
+  .sketch-box {
+    background: #0d1117;
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    margin: 12px 0;
+    overflow-x: auto;
+  }
+  .sketch-box .caption {
+    color: var(--muted);
+    font-size: 0.8em;
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  /* ===== Code ===== */
+  pre {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.85em;
+    line-height: 1.55;
+    margin: 12px 0;
+  }
+  code { font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace; font-size: 0.9em; }
+  .code-diff-old { color: var(--red); }
+  .code-diff-new { color: var(--green); }
+  .code-comment { color: var(--muted); font-style: italic; }
+
+  /* ===== Hardware List ===== */
+  .hw-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.93em;
+  }
+  .hw-table th {
+    text-align: left;
+    background: var(--card);
+    color: var(--accent);
+    padding: 10px 14px;
+    border-bottom: 2px solid var(--border);
+  }
+  .hw-table td {
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hw-table tr:hover td { background: rgba(88,166,255,0.04); }
+
+  /* ===== Bug Severity ===== */
+  .bug-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .bug-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+  }
+  .bug-card.severe  { border-left: 3px solid var(--red); }
+  .bug-card.medium  { border-left: 3px solid var(--orange); }
+  .bug-card.minor   { border-left: 3px solid var(--yellow); }
+  .bug-card h4 { margin: 0 0 6px; }
+  .bug-card .symptom { color: var(--red); font-weight: 600; font-size: 0.85em; }
+  .bug-card .root    { color: var(--orange); font-size: 0.85em; margin-top: 4px; }
+  .bug-card .fix     { color: var(--green); font-size: 0.85em; margin-top: 4px; }
+
+  /* ===== Wiring ===== */
+  .wiring-diagram {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px;
+    margin: 16px 0;
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 0.8em;
+    line-height: 1.5;
+    white-space: pre;
+    overflow-x: auto;
+    color: var(--text);
+  }
+  .wiring-diagram .pin { color: var(--accent); }
+  .wiring-diagram .wire { color: var(--muted); }
+  .wiring-diagram .label { color: var(--green); }
+  .wiring-diagram .warn { color: var(--yellow); }
+
+  /* ===== Reflections ===== */
+  .reflection-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 22px 24px;
+    margin: 16px 0;
+  }
+  .reflection-block .lesson {
+    color: var(--green);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .reflection-block .detail { color: var(--text); }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 700px) {
+    .profile-grid, .bug-grid { grid-template-columns: 1fr; }
+    body { padding: 20px 12px; }
+    pre { font-size: 0.75em; padding: 10px 12px; }
+  }
+
+  .footer { text-align: center; color: var(--muted); font-size: 0.82em; margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--border); }
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>期末创新项目</h1>
-        <div class="content">
-            <h2>1. 团队介绍</h2>
-            <div class="placeholder">
-                待补充：团队成员、分工、核心优势（如编程/建模/焊接等技能）
-            </div>
 
-            <h2>2. 制作过程</h2>
-            <div class="placeholder">
-                待补充：项目需求分析、技术选型、核心步骤（含遇到的问题与解决方法）、时间规划
-            </div>
+<h1>期末创新项目 — 舵机驱动空气质量检测遥控小车</h1>
+<p style="text-align:center;color:var(--muted);margin-bottom:40px;">2026年5月 Hackathon · 设计迭代与调试记录</p>
 
-            <h2>3. 成果演示</h2>
-            <div class="placeholder">
-                待补充：项目成品截图/视频、功能说明、测试结果、可优化方向
-            </div>
-        </div>
+<!-- ============================================================ -->
+<!-- PROJECT PROFILE -->
+<!-- ============================================================ -->
+<h2>一、Project Profile</h2>
 
-        <!-- 返回主页按钮 -->
-        <a href="index.html" class="back-btn">返回日志主页</a>
+<div class="profile-grid">
+  <div class="profile-card">
+    <div class="label">项目名称</div>
+    <div class="value">舵机驱动空气质量检测遥控小车</div>
+  </div>
+  <div class="profile-card">
+    <div class="label">一句话产品定义</div>
+    <div class="oneliner">"ESP-NOW 遥控小车 + 环境感知：空气质量检测、超声波避障、GPS 定位，一块屏幕掌控全局"</div>
+  </div>
+  <div class="profile-card full">
+    <h3>团队成员 & 贡献</h3>
+    <div class="member">
+      <span class="name">刘宸宇</span>
+      <div class="contrib">嵌入式固件开发（小车端 + 遥控器端 ESP32-C3 全部代码）、ESP-NOW 通信协议设计、传感器驱动集成、FreeRTOS 实时任务架构、TFT UI 四页面系统、舵机控制算法、避障逻辑、硬件接线与供电方案设计、全流程调试与问题排查</div>
     </div>
+    <div class="member">
+      <span class="name">束伟</span>
+      <div class="contrib">3D 建模与打印（小车底盘、传动箱、转向模块、轮毂轮胎等全部结构件）、机械装配与结构调试</div>
+      <div class="contrib" style="font-size:0.83em;color:var(--muted);margin-top:4px;">建模开源出处：B站UP主 <a href="https://space.bilibili.com/58593690" style="color:var(--accent);" target="_blank" rel="noopener">苦工创客Matt</a>（UID: 58593690），视频教程：<a href="https://www.bilibili.com/video/BV1Tt5T6MEDb" style="color:var(--accent);" target="_blank" rel="noopener">BV1Tt5T6MEDb</a></div>
+    </div>
+  </div>
+</div>
+
+<h3>实物展示</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:16px 0;">
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center;">
+    <img src="图片视频/遥控器实物.jpg" alt="遥控器实物" style="width:100%;max-width:400px;border-radius:6px;" loading="lazy">
+    <p style="color:var(--muted);font-size:0.83em;margin-top:8px;">遥控器端 — ST7735 TFT + 单摇杆 + SW1/SW2 按键</p>
+  </div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center;">
+    <img src="图片视频/小车实物.jpg" alt="小车实物" style="width:100%;max-width:400px;border-radius:6px;" loading="lazy">
+    <p style="color:var(--muted);font-size:0.83em;margin-top:8px;">小车端 — 3D打印底盘 + 舵机驱动 + 传感器组</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DESIGN LOG -->
+<!-- ============================================================ -->
+<h2>二、Design Log（设计迭代时间轴）</h2>
+
+<div class="timeline">
+
+  <!-- 周六上午 -->
+  <div class="tl-day">
+    <div class="tl-label">📅 周六上午 — 通信裸板验证与引脚排查</div>
+
+    <div class="tl-slot">
+      <div class="time">09:00 — 搭建最小通信链路</div>
+      <p>两块 ESP32-C3 上电，烧录 ESP-NOW 基础收发代码。小车端每秒发送模拟传感器数据，遥控器端串口打印接收内容。<span class="tag ok">通信 OK</span></p>
+      <p>关键决策：两端统一数据包结构体 <code>ctrl_packet_t</code> / <code>sensor_packet_t</code>，用 <code>memcpy</code> 而非逐字段拷贝，确保二进制兼容。</p>
+    </div>
+
+    <div class="tl-slot">
+      <div class="time">10:15 — 遭遇 GPIO9 死坑</div>
+      <p>编译通过但板子行为异常：LED 不受控、随机重启。</p>
+      <p><strong>发现：</strong>ESP32-C3 的 GPIO9 内部连接 SPI Flash 的 CS 引脚。用作普通 GPIO 会与 Flash 访问冲突，导致启动崩溃。</p>
+      <span class="tag fail">BLOCKER</span>
+      <pre>// vehicle.ino — 引脚迁移
+#define PIN_LED_STATUS      9    →   <span class="code-diff-new">#define PIN_LED_STATUS      10</span>
+
+// remote_control.ino — 引脚迁移
+#define PIN_BTN_MODE        9    →   <span class="code-diff-new">#define PIN_BTN_MODE        10</span></pre>
+      <p><span class="tag ok">解决</span> 将所有 GPIO9 引用迁移到 GPIO10。此后 GPIO9 列入团队禁用引脚清单。</p>
+    </div>
+
+    <div class="tl-slot">
+      <div class="time">11:30 — ESP-NOW 信道漂移致收包率崩溃</div>
+      <p>基础通信正常，但偶尔出现"遥控信号超时"。在 <code>onDataRecv</code> 回调中加入收包计数器后，发现收包率仅 <strong>~1 pkt/s</strong>（遥控端以 25Hz 发送，应收 ~25 pkt/s）。</p>
+      <p><strong>诊断过程：</strong></p>
+      <ol style="margin-left:20px;">
+        <li>排除串口打印阻塞 → 无改善</li>
+        <li>排除 TFT SPI 干扰 → 无改善</li>
+        <li><strong>定位根因：</strong><code>peer.channel = 0</code> 让 WiFi 栈自动选信道，两块板子随机漂移到不同信道</li>
+      </ol>
+      <span class="tag fail">CRITICAL</span>
+      <pre>// 改前
+esp_now_peer_info_t peer = {};
+peer.channel = 0;  <span class="code-comment">// 自动 → 不可靠</span>
+
+// 改后
+#include &lt;esp_wifi.h&gt;
+WiFi.disconnect();
+<span class="code-diff-new">esp_wifi_set_channel(1, WIFI_SECOND_CHAN_NONE);</span>  <span class="code-comment">// 强制锁定信道1</span>
+peer.channel = <span class="code-diff-new">1</span>;</pre>
+      <p><span class="tag ok">结果</span> 收包率从 ~1 pkt/s 跃升至 <strong>220+ pkt/s</strong>，"遥控信号超时"彻底消失。</p>
+    </div>
+  </div>
+
+  <!-- 周六下午 -->
+  <div class="tl-day afternoon">
+    <div class="tl-label">📅 周六下午 — 舵机死寂 & TFT 显示迷宫</div>
+
+    <div class="tl-slot">
+      <div class="time">13:30 — 舵机完全不转：LEDC API 在 Core 3.3.8 下失效</div>
+      <p>通信正常（收包率 220+），控制指令非零，串口输出的脉宽计算值正确（1000-2000μs），但舵机纹丝不动。</p>
+      <p><strong>诊断：</strong>用 LED+220Ω 电阻测试 GPIO 输出引脚，LED 不亮 → 确认 GPIO 实际无 PWM 波形输出。</p>
+      <p><strong>根因：</strong>ESP32 Arduino Core 3.3.8 下 <code>ledcAttach(pin, freq, res)</code> + <code>ledcWrite(pin, duty)</code> API 不产出实际波形，疑似库版本内部通道分配兼容问题。</p>
+      <span class="tag fail">BLOCKER</span>
+      <pre>// 改前 — LEDC API (Core 3.3.8 不工作)
+ledcAttach(PIN_DRIVE_SERVO, 50, 16);
+ledcWrite(PIN_DRIVE_SERVO, usToDuty(1500));
+
+// 改后 — ESP32Servo 库 (直接操作硬件定时器)
+#include &lt;ESP32Servo.h&gt;
+Servo driveServo;
+driveServo.<span class="code-diff-new">attach</span>(PIN_DRIVE_SERVO);
+driveServo.<span class="code-diff-new">writeMicroseconds</span>(us);</pre>
+      <p><span class="tag ok">结果</span> 更换为 ESP32Servo 库后，舵机立即响应。LEDC 方案完全弃用。</p>
+
+      <h4>附：舵机响应速度分析</h4>
+      <p>收包率 220+ pkt/s 已达 ESP-NOW 代码极限（实测 CPU 空闲率仍有余量，瓶颈在 WiFi 栈调度而非应用层）。MG90S 360° 舵机机械响应时间 50~100ms，是真正的物理瓶颈——电信号再快，齿轮组也跟不上。主 loop 的 <code>delay(5)</code> 已优化为 <code>delay(1)</code>，控制包发送频率设定在 50Hz（每 20ms），在响应速度与 CPU 负载之间取得平衡。</p>
+
+      <div class="sketch-box">
+        <svg viewBox="0 0 560 120" style="width:100%;max-width:560px;">
+          <rect x="0" y="0" width="560" height="120" fill="#0d1117" rx="6"/>
+          <text x="20" y="25" fill="#8b949e" font-size="11">LED+电阻测试法：最便宜的 PWM 探测器</text>
+          <rect x="20" y="40" width="60" height="30" fill="none" stroke="#58a6ff" stroke-width="1.5" rx="3"/>
+          <text x="30" y="60" fill="#58a6ff" font-size="10">ESP32-C3</text>
+          <line x1="80" y1="55" x2="130" y2="55" stroke="#c9d1d9" stroke-width="1.5"/>
+          <text x="95" y="50" fill="#8b949e" font-size="9">GPIO1</text>
+          <circle cx="140" cy="47" r="6" fill="#f85149" opacity="0.9"/>
+          <text x="140" y="42" fill="#f85149" font-size="10" text-anchor="middle">LED</text>
+          <line x1="146" y1="47" x2="170" y2="47" stroke="#c9d1d9" stroke-width="1.5"/>
+          <rect x="170" y="39" width="60" height="16" fill="none" stroke="#d2991d" stroke-width="1" rx="2"/>
+          <text x="200" y="51" fill="#d2991d" font-size="9" text-anchor="middle">220Ω</text>
+          <line x1="230" y1="47" x2="260" y2="47" stroke="#c9d1d9" stroke-width="1.5"/>
+          <text x="270" y="51" fill="#c9d1d9" font-size="10">GND</text>
+          <text x="20" y="85" fill="#8b949e" font-size="10">有PWM输出 → LED闪烁/变亮 | 无输出 → LED全暗</text>
+          <text x="20" y="100" fill="#f85149" font-size="10">实测：LED全暗 → 确认 LEDC API 未产出波形</text>
+        </svg>
+        <div class="caption">▲ 图1：LED+电阻测试 PWM 输出 — 最简陋但最直接的诊断手段</div>
+      </div>
+    </div>
+
+    <div class="tl-slot">
+      <div class="time">15:00 — TFT 彩边/偏移：7 种组合均失败</div>
+      <p>1.8 寸 ST7735 TFT 屏幕初始化后画面右侧和下侧有彩边，左侧和上方显示不全。</p>
+      <p><strong>尝试路径（全失败）：</strong></p>
+      <table style="width:100%;font-size:0.85em;margin:8px 0;">
+        <tr style="color:var(--muted);"><th style="text-align:left;padding:4px;">#</th><th style="text-align:left;padding:4px;">initR</th><th style="text-align:left;padding:4px;">rotation</th><th style="text-align:left;padding:4px;">结果</th></tr>
+        <tr><td>1</td><td>GREENTAB</td><td>1</td><td style="color:var(--red);">偏左偏上，显示不全</td></tr>
+        <tr><td>2</td><td>BLACKTAB</td><td>1</td><td style="color:var(--red);">不行</td></tr>
+        <tr><td>3</td><td>REDTAB</td><td>1</td><td style="color:var(--red);">不行</td></tr>
+        <tr><td>4</td><td>GREENTAB</td><td>0</td><td style="color:var(--red);">偏左偏上</td></tr>
+        <tr><td>5</td><td>BLACKTAB</td><td>0</td><td style="color:var(--red);">左+下缺失，右+上有彩边</td></tr>
+        <tr><td>6</td><td>GREENTAB</td><td>2/3</td><td style="color:var(--red);">不行</td></tr>
+        <tr><td>7</td><td>自定义 offset 子类</td><td>任意</td><td style="color:var(--red);">无效 — setRotation() 内部覆盖了 _colstart/_rowstart</td></tr>
+      </table>
+      <div class="sketch-box">
+        <svg viewBox="0 0 560 200" style="width:100%;max-width:560px;">
+          <rect x="0" y="0" width="560" height="200" fill="#0d1117" rx="6"/>
+          <text x="20" y="22" fill="#8b949e" font-size="11">TFT 偏移问题 — 失败尝试示意</text>
+          <!-- 期望画面 -->
+          <rect x="20" y="40" width="80" height="100" fill="none" stroke="#3fb950" stroke-width="1.5"/>
+          <text x="60" y="100" fill="#3fb950" font-size="10" text-anchor="middle">期望</text>
+          <rect x="24" y="44" width="72" height="92" fill="none" stroke="#3fb950" stroke-width="0.5" stroke-dasharray="3"/>
+          <text x="60" y="55" fill="#3fb950" font-size="8" text-anchor="middle">128×160</text>
+          <!-- 实际画面1 -->
+          <rect x="130" y="40" width="80" height="100" fill="none" stroke="#f85149" stroke-width="1.5"/>
+          <text x="170" y="100" fill="#f85149" font-size="10" text-anchor="middle">GREENTAB</text>
+          <text x="170" y="113" fill="#f85149" font-size="10" text-anchor="middle">rot=1</text>
+          <rect x="140" y="32" width="60" height="80" fill="none" stroke="#f85149" stroke-width="0.5" stroke-dasharray="3"/>
+          <text x="170" y="150" fill="#f85149" font-size="8" text-anchor="middle">偏左上</text>
+          <!-- 实际画面2 -->
+          <rect x="240" y="40" width="80" height="100" fill="none" stroke="#f85149" stroke-width="1.5"/>
+          <text x="280" y="100" fill="#f85149" font-size="10" text-anchor="middle">BLACKTAB</text>
+          <text x="280" y="113" fill="#f85149" font-size="10" text-anchor="middle">rot=0</text>
+          <rect x="250" y="50" width="60" height="70" fill="none" stroke="#f85149" stroke-width="0.5" stroke-dasharray="3"/>
+          <text x="220" y="150" fill="#f85149" font-size="8" text-anchor="middle">左缺失</text>
+          <text x="310" y="140" fill="#f85149" font-size="8" text-anchor="middle">彩边→</text>
+          <!-- 最终方案 -->
+          <rect x="350" y="40" width="80" height="100" fill="none" stroke="#3fb950" stroke-width="2"/>
+          <text x="390" y="100" fill="#3fb950" font-size="10" text-anchor="middle">GREENTAB</text>
+          <text x="390" y="113" fill="#3fb950" font-size="10" text-anchor="middle">rot=0 ✓</text>
+          <rect x="354" y="44" width="72" height="92" fill="none" stroke="#3fb950" stroke-width="0.5" stroke-dasharray="3"/>
+          <!-- 箭头 -->
+          <text x="460" y="90" fill="#3fb950" font-size="14">→</text>
+          <text x="470" y="90" fill="#3fb950" font-size="10">唯一正确</text>
+          <text x="470" y="103" fill="#3fb950" font-size="10">组合</text>
+          <!-- 底部说明 -->
+          <line x1="20" y1="165" x2="540" y2="165" stroke="#30363d" stroke-width="0.5"/>
+          <text x="20" y="182" fill="#8b949e" font-size="10">教训: 自定义 offset 子类无效 — setRotation() 内部会从 tabcolor 数组重新读取 _colstart/_rowstart，覆盖手动设置的值</text>
+        </svg>
+        <div class="caption">▲ 图2：TFT 7 种组合尝试 — 最终确认为 INITR_GREENTAB + setRotation(0)</div>
+      </div>
+      <p><strong>突破工具：</strong>编写了自动边框轮换测试，启动时轮换 4 个 rotation 方向，每个显示 3 秒，无需反复编译。</p>
+      <pre>// 自动化诊断：4方向轮换，每个3秒
+for (int r = 0; r < 4; r++) {
+  tft.setRotation(r);
+  tft.fillScreen(ST7735_BLACK);
+  tft.drawRect(0, 0, 128, 160, ST7735_WHITE);  <span class="code-comment">// 外框</span>
+  tft.drawRect(1, 1, 126, 158, ST7735_RED);     <span class="code-comment">// 内框</span>
+  tft.setCursor(50, 60); tft.print("R"); tft.print(r);
+  delay(3000);
+}</pre>
+      <p><span class="tag ok">最终确认</span> <strong>INITR_GREENTAB + setRotation(0)</strong> 无需任何额外偏移。</p>
+    </div>
+
+    <div class="tl-slot">
+      <div class="time">17:00 — 中文显示尝试：U8g2 与 ST7735 底层冲突</div>
+      <p>尝试用 U8g2 + WQY12 中文字体显示中文。但 <code>u8g2.begin(tft)</code> 内部重置了 TFT 寄存器，导致之前调好的 GREENTAB+rotation0 偏移再次错位。<span class="tag fail">放弃</span></p>
+      <p><strong>妥协方案：</strong>保留英文界面，使用 Adafruit_GFX 内置 6×8px 字体。所有 UI 标签用英文缩写。</p>
+    </div>
+
+    <div class="tl-slot">
+      <div class="time">18:30 — 屏幕闪烁：全屏擦除 → 局部刷新技术</div>
+      <p>每次数据更新调用 <code>tft.fillScreen(BLACK)</code> 全屏擦除，产生明显闪烁。</p>
+      <p><strong>方案：</strong>分离静态标签与动态数据。标签在 <code>page_dirty</code> 时画一次，数据更新时只精准清除数值区域。</p>
+      <pre>// 改前 — 全屏擦除，闪烁明显
+void drawDistPage() {
+  tft.fillScreen(ST7735_BLACK);     <span class="code-comment">// 全屏闪</span>
+  tft.setCursor(0, 10); tft.print("Front:");
+  tft.setCursor(30, 10); tft.print(dist);
+}
+
+// 改后 — 标签一次，数据精准清除
+void drawDistPage() {
+  <span class="code-comment">// 静态标签: 仅 page_dirty 时绘制</span>
+  if (page_dirty[PAGE_DIST]) {
+    tft.fillRect(0, RY(1), SW, SH - RY(1), ST7735_BLACK);
+    tft.setCursor(0, RY(3)); tft.print("Front:");     <span class="code-comment">// 一次</span>
+  }
+  <span class="code-comment">// 动态数据: 只清除数值区域</span>
+  tft.fillRect(30, RY(3), SW-30, ROW_H, ST7735_BLACK); <span class="code-comment">// 只清数值区</span>
+  tft.setCursor(30, RY(3)); tft.print(dist/10.0, 1);
+}</pre>
+      <p><span class="tag ok">结果</span> 闪烁彻底消除，刷新只发生在数值变化区域。</p>
+    </div>
+  </div>
+
+  <!-- 周日上午 -->
+  <div class="tl-day morning">
+    <div class="tl-label">📅 周日早晨 — 舵机响应延迟根因挖掘 & 实车联调</div>
+
+    <div class="tl-slot">
+      <div class="time">08:00 — 前进慢/后退正常：多因叠加 Bug</div>
+      <p>遥控推前进时舵机转速慢且有明显延迟，推后退时转速正常。转向舵机也有延迟。</p>
+      <p><strong>诊断过程：</strong></p>
+      <ol style="margin-left:20px;">
+        <li>加入 <code>DEBUG_TIMING</code> 开关，输出各阶段耗时（μs）</li>
+        <li>发现 <code>Dist=65535mm</code>（N/A）时前进正常（前30s），30s 硬件自检后 HC-SR04 启用，<code>Dist</code> 跳变 → 避障触发</li>
+        <li>定位到 <strong>三个独立问题叠加</strong>：</li>
+      </ol>
+
+      <h4>根因 ①：主 loop 阻塞 → FreeRTOS 独立舵机任务</h4>
+      <p><code>loop()</code> 中舵机更新排在最末尾，前面有三个阻塞源：<code>pulseIn()</code> 阻塞 30ms、<code>GPS while(available)</code> 无界循环、<code>esp_now_send()</code> 占用 WiFi。遥控端以 50Hz 发送，车端实际舵机更新间隔 30-50ms，延迟累积。</p>
+      <pre>// ★ FreeRTOS 独立任务，优先级 2（高于默认 loop_task 优先级 1）
+void servoTask(void *pvParameters) {
+  TickType_t lastWakeTime = xTaskGetTickCount();
+  while (1) {
+    int8_t eff_spd = applyObstacleLimit(incoming_ctrl.speed);
+    setDriveSpeed(eff_spd);
+    setSteering(incoming_ctrl.steering);
+    vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(20));  <span class="code-comment">// 精确 50Hz</span>
+  }
+}
+// setup() 中:
+xTaskCreate(servoTask, "servo", 2048, NULL, 2, &servoTaskHandle);</pre>
+
+      <h4>根因 ②：ESP-NOW 回调与避障的竞态条件</h4>
+      <p>两条路径同时修改 <code>incoming_ctrl.speed</code>，产生 100↔30 高频振荡：ESP-NOW 回调写入 100 → 主 loop 避障覆盖为 30 → 回调再次写入 100 → 循环。前进时舵机在 100% 和 30% 之间抖动。</p>
+      <pre>// ★ 统一限速入口 — 只在写入舵机前最后一刻施加
+int8_t applyObstacleLimit(int8_t raw_speed) {
+  uint16_t d = outgoing_sensor.distance_mm;
+  if (d == 65535) return raw_speed;             <span class="code-comment">// 无数据，不限制</span>
+  if (d < DISTANCE_STOP_MM)  return (raw_speed > 0) ? 0 : raw_speed;
+  if (d < DISTANCE_ALERT_MM) return (raw_speed > 20) ? 20 : raw_speed;
+  return raw_speed;
+}
+<span class="code-comment">// incoming_ctrl.speed 保持遥控器原始值不变</span>
+<span class="code-comment">// 限速在 servoTask 和 onDataRecv 中通过 applyObstacleLimit() 统一施加</span></pre>
+
+      <h4>根因 ③：HC-SR04 噪声触发误避障 → 中断方式 + 三重防护</h4>
+      <p><code>pulseIn()</code> 可能捕获 ~5μs 噪声脉冲，整数除法后 <code>distance_mm=0</code>。避障条件 <code>0 < STOP(150)</code> 成立，且只拦截 <code>speed > 0</code>（前进），后退完全不受影响——这解释了前进/后退的不对称性。</p>
+      <pre>// ① ISR 替代 pulseIn() — 消除 30ms 阻塞
+void IRAM_ATTR hcsr04EchoISR() {
+  uint8_t level = digitalRead(PIN_HCSR04_ECHO);
+  if (level == HIGH) {
+    if (hcsr04_state == HCSR04_TRIGGERED)
+      hcsr04_echo_start = micros();
+  } else {
+    if (hcsr04_state == HCSR04_TRIGGERED && hcsr04_echo_start > 0) {
+      unsigned long dur = micros() - hcsr04_echo_start;
+      <span class="code-comment">// ② 脉宽校验: 120us~25000us = 2cm~4.3m, 超出即噪声</span>
+      if (dur >= 120 && dur <= 25000) {
+        hcsr04_echo_dur = dur;
+        hcsr04_echo_ready = true;
+      }
+    }
+    hcsr04_state = HCSR04_IDLE;
+  }
+}
+// ③ 滑动窗口中位数滤波 (5样本) — 单个脉冲噪声被过滤
+static uint16_t win[5];
+// ... 排序取中位数 ...
+outgoing_sensor.distance_mm = s[2];  <span class="code-comment">// 中位数</span></pre>
+      <p><span class="tag ok">结果</span> 修改前 <code>Dist</code> 值每秒几十次剧烈跳变（23↔31↔150↔2632mm），修改后读数稳定在合理的聚类值。前进/后退响应对称，转向延迟消除。</p>
+    </div>
+
+    <div class="tl-slot">
+      <div class="time">10:00 — UI 重构：双模式菜单 → 四页面直接切换</div>
+      <p>原有 MODE_BTN 切换割裂了驾驶和数据查看；菜单导航复杂；SW2 按键无响应（GPIO19 被 USB D+ 占用）。</p>
+      <pre>// 改后 — 四页面直接切换，摇杆始终控制小车
+enum Page { PAGE_DRIVE, PAGE_DIST, PAGE_GPS, PAGE_AIR, PAGE_COUNT };
+
+// SW1=下一页  SW2=上一页
+if (btn(PIN_JOY1_SW)) { current_page = (current_page + 1) % PAGE_COUNT; }
+if (btn(PIN_JOY2_SW)) { current_page = (current_page + 3) % PAGE_COUNT; }
+
+// 摇杆始终控制 — 不受页面切换影响
+outgoing_ctrl.speed = readJoy(PIN_JOY1_Y);   <span class="code-comment">// Y=前进后退</span>
+outgoing_ctrl.steering = -readJoy(PIN_JOY1_X); <span class="code-comment">// X=转向(取反)</span></pre>
+      <div class="sketch-box">
+        <svg viewBox="0 0 560 160" style="width:100%;max-width:560px;">
+          <rect x="0" y="0" width="560" height="160" fill="#0d1117" rx="6"/>
+          <text x="20" y="22" fill="#8b949e" font-size="11">UI 架构变迁</text>
+          <!-- 改前 -->
+          <rect x="20" y="40" width="230" height="105" fill="none" stroke="#f85149" stroke-width="1" rx="4"/>
+          <text x="135" y="58" fill="#f85149" font-size="10" text-anchor="middle">改前：双模式</text>
+          <text x="30" y="78" fill="#c9d1d9" font-size="9">MODE_DRIVE ─── 摇杆控制 + TFT</text>
+          <text x="30" y="98" fill="#c9d1d9" font-size="9">MODE_MENU ──┬─ 空气质量</text>
+          <text x="30" y="113" fill="#c9d1d9" font-size="9">            ├─ GPS</text>
+          <text x="30" y="128" fill="#c9d1d9" font-size="9">            ├─ 测距</text>
+          <text x="30" y="143" fill="#c9d1d9" font-size="9">            └─ 设置</text>
+          <text x="135" y="155" fill="#f85149" font-size="8" text-anchor="middle">问题: 驱动/数据割裂，SW2 不响应</text>
+          <!-- 箭头 -->
+          <text x="265" y="95" fill="#3fb950" font-size="16">→</text>
+          <!-- 改后 -->
+          <rect x="295" y="40" width="245" height="105" fill="none" stroke="#3fb950" stroke-width="1.5" rx="4"/>
+          <text x="417" y="58" fill="#3fb950" font-size="10" text-anchor="middle">改后：四页面直切</text>
+          <text x="305" y="78" fill="#c9d1d9" font-size="9">P1: 驾驶 ──── 摇杆始终控制</text>
+          <text x="305" y="98" fill="#c9d1d9" font-size="9">P2: 测距 ──── SW1/SW2 切页</text>
+          <text x="305" y="118" fill="#c9d1d9" font-size="9">P3: GPS</text>
+          <text x="305" y="138" fill="#c9d1d9" font-size="9">P4: 空气质量</text>
+          <text x="417" y="155" fill="#3fb950" font-size="8" text-anchor="middle">优势: 驱动/数据不割裂，SW2 修复</text>
+        </svg>
+        <div class="caption">▲ 图3：UI 架构从双模式重构为四页面系统</div>
+      </div>
+    </div>
+
+    <div class="tl-slot">
+      <div class="time">10:45 — 速度条中位零设计</div>
+      <p>原有速度条从左边延伸，0 速时填充一半，不直观。改为中位线零速设计：右绿前进、左红后退、0 速空条。</p>
+      <pre>// 改前 — 0速时填半条，含义模糊
+int b = map(speed, -100, 100, 0, SW);  // -100→0, 0→64, 100→128
+if (speed >= 0) tft.fillRect(0, y, b, h, GREEN);   // 0速时填半条
+else tft.fillRect(mid, y, b-mid, h, RED);          // 负数计算混乱
+
+// 改后 — 中位线=零速，右绿前进，左红后退，0速空条
+int mid = SW / 2;
+tft.drawRect(0, y, SW, 8, BLUE);
+tft.drawLine(mid, y, mid, y+8, WHITE);  // 零位中线
+
+if (speed > 0) {
+  int len = map(speed, 0, 100, 0, mid);
+  tft.fillRect(mid, y+1, len, 6, GREEN);        // 中→右绿色前进
+} else if (speed < 0) {
+  int len = map(-speed, 0, 100, 0, mid);
+  tft.fillRect(mid - len, y+1, len, 6, RED);    // 中←左红色后退
+}
+// speed==0: 空条，不填充</pre>
+      <div class="sketch-box">
+        <svg viewBox="0 0 560 120" style="width:100%;max-width:560px;">
+          <rect x="0" y="0" width="560" height="120" fill="#0d1117" rx="6"/>
+          <text x="20" y="22" fill="#8b949e" font-size="11">速度条设计变迁</text>
+          <text x="135" y="45" fill="#f85149" font-size="10" text-anchor="middle">改前</text>
+          <rect x="20" y="55" width="230" height="16" fill="none" stroke="#f85149" stroke-width="1" rx="2"/>
+          <rect x="20" y="55" width="115" height="16" fill="#3fb950" opacity="0.4"/>
+          <text x="135" y="67" fill="#c9d1d9" font-size="9" text-anchor="middle">speed=0 时填充半条 ↑ 含义模糊</text>
+          <text x="265" y="67" fill="#3fb950" font-size="16">→</text>
+          <text x="415" y="45" fill="#3fb950" font-size="10" text-anchor="middle">改后</text>
+          <rect x="295" y="55" width="240" height="16" fill="none" stroke="#58a6ff" stroke-width="1" rx="2"/>
+          <line x1="415" y1="55" x2="415" y2="71" stroke="#fff" stroke-width="1.5"/>
+          <text x="415" y="83" fill="#fff" font-size="8" text-anchor="middle">0</text>
+          <rect x="415" y="57" width="50" height="12" fill="#3fb950" opacity="0.6"/>
+          <text x="440" y="67" fill="#3fb950" font-size="8">前进&gt;</text>
+          <rect x="355" y="57" width="30" height="12" fill="#f85149" opacity="0.6"/>
+          <text x="340" y="67" fill="#f85149" font-size="8" text-anchor="end">&lt;后退</text>
+          <text x="415" y="100" fill="#c9d1d9" font-size="9" text-anchor="middle">speed=0 时完全空条 ✓ 一目了然</text>
+        </svg>
+        <div class="caption">▲ 图4：速度条从"左填充"改为"中位零"设计</div>
+      </div>
+    </div>
+
+    <div class="tl-slot">
+      <div class="time">11:30 — 实车联调：GPS 引脚反接</div>
+      <p>GPS 模块户外绿灯闪烁（已定位），但遥控器屏幕经纬度/卫星数始终为零。</p>
+      <p><strong>诊断：</strong><code>HardwareSerial::begin(baud, config, rxPin, txPin)</code> 的 RX/TX 参数顺序搞反。</p>
+      <pre>// 改前 — RX 和 TX 传反了
+#define PIN_GPS_TX  7   <span class="code-comment">// 接 GPS 模块 TX → 应为 ESP32 RX</span>
+#define PIN_GPS_RX  8   <span class="code-comment">// 接 GPS 模块 RX → 应为 ESP32 TX</span>
+gpsSerial.begin(9600, SERIAL_8N1, PIN_GPS_RX, PIN_GPS_TX);  <span class="code-comment">// ← RX=8, TX=7 反了!</span>
+
+// 改后
+gpsSerial.begin(9600, SERIAL_8N1, PIN_GPS_TX, PIN_GPS_RX);  <span class="code-comment">// ← RX=7, TX=8 正确</span></pre>
+      <p><span class="tag warn">教训</span> <code>HardwareSerial::begin()</code> 参数顺序是 <code>(rxPin, txPin)</code>，引脚宏命名容易产生歧义。</p>
+    </div>
+
+    <div class="tl-slot">
+      <div class="time">12:00 — 实车联调细节：中位、方向、避障、阈值</div>
+
+      <h4>转向中位微调</h4>
+      <p>舵机中位不正，车轮初始偏左。初次误判为右偏，<code>STEER_CENTER_US</code> 从 1500 调到 1470。上车测试后用户纠正为左偏，改为 <strong>1530</strong>（向右修正 30μs）。</p>
+      <pre>#define STEER_CENTER_US     1530   // 从 1500 向右修正 30μs
+<span class="code-comment">// 微调方法: 减小=向左修正, 增大=向右修正, 每次调 10~30μs 上车测试</span></pre>
+
+      <h4>摇杆左右方向纠正</h4>
+      <p>摇杆推左但车轮右转，推右却左转。用户反馈"屏幕文字显示和车轮实际方向一致"，说明显示逻辑正确，只需修正输入映射。</p>
+      <pre>// 改前
+int8_t t = readJoy(PIN_JOY1_X);
+// 改后
+int8_t t = -readJoy(PIN_JOY1_X);  // 仅取反输入，不改显示标签</pre>
+
+      <h4>避障灵敏度逐步提升（3轮迭代）</h4>
+      <table style="width:100%;font-size:0.85em;margin:8px 0;">
+        <tr style="color:var(--muted);"><th style="text-align:left;padding:4px;">轮次</th><th style="text-align:left;padding:4px;">ALERT (预警)</th><th style="text-align:left;padding:4px;">STOP (刹停)</th><th style="text-align:left;padding:4px;">警报区限速</th><th style="text-align:left;padding:4px;">蜂鸣间隔</th><th style="text-align:left;padding:4px;">说明</th></tr>
+        <tr><td>初始</td><td>300mm</td><td>150mm</td><td>30</td><td>250ms</td><td>原始值</td></tr>
+        <tr><td>第1轮</td><td>400mm</td><td>200mm</td><td>20</td><td>150ms</td><td>整体提升</td></tr>
+        <tr><td style="color:var(--green);">第2轮</td><td style="color:var(--green);"><strong>500mm</strong></td><td style="color:var(--green);"><strong>300mm</strong></td><td style="color:var(--green);">20</td><td style="color:var(--green);">150ms</td><td style="color:var(--green);">最终配置</td></tr>
+      </table>
+      <p>最终配置：50cm 开始预警减速+LED闪烁，30cm 直接刹停禁止前进。</p>
+
+      <h4>空气质量显示阈值缩小</h4>
+      <p>测试环境需要 0-400 的小量程，而非原始 0-4095。</p>
+      <table style="width:100%;font-size:0.85em;margin:8px 0;">
+        <tr style="color:var(--muted);"><th style="text-align:left;padding:4px;">项目</th><th style="text-align:left;padding:4px;">改前</th><th style="text-align:left;padding:4px;">改后</th></tr>
+        <tr><td>进度条上限</td><td>4095</td><td style="color:var(--green);">400</td></tr>
+        <tr><td>Good</td><td>&lt; 1000</td><td style="color:var(--green);">&lt; 100</td></tr>
+        <tr><td>Fair</td><td>1000~1999</td><td style="color:var(--green);">100~199</td></tr>
+        <tr><td>Poor</td><td>&gt;= 2000</td><td style="color:var(--green);">&gt;= 200</td></tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- TECH STACK & CODE -->
+<!-- ============================================================ -->
+<h2>三、Tech Stack &amp; Code</h2>
+
+<h3>硬件清单</h3>
+<table class="hw-table">
+  <thead>
+    <tr><th>模块</th><th>型号</th><th>数量</th><th>接口</th><th>用途</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>主控 ×2</td><td>ESP32-C3 (RISC-V 160MHz)</td><td>2</td><td>—</td><td>小车端 + 遥控器端</td></tr>
+    <tr><td>驱动舵机</td><td>MG90S 360° 金属齿轮</td><td>1</td><td>GPIO1 (PWM)</td><td>前进/后退驱动</td></tr>
+    <tr><td>转向舵机</td><td>MG90S 360° 金属齿轮</td><td>1</td><td>GPIO2 (PWM)</td><td>阿克曼转向</td></tr>
+    <tr><td>TFT 屏幕</td><td>1.8" ST7735 128×160 SPI</td><td>1</td><td>SPI (CS4/DC5/MOSI7/SCK8)</td><td>遥控器显示</td></tr>
+    <tr><td>摇杆模块</td><td>双轴电位器 + 按键</td><td>1</td><td>ADC0(X)/ADC1(Y)+GPIO18(SW)</td><td>速度+转向输入</td></tr>
+    <tr><td>按键</td><td>轻触开关</td><td>1</td><td>GPIO10 (INPUT_PULLUP)</td><td>SW2 上一页</td></tr>
+    <tr><td>超声波</td><td>HC-SR04</td><td>1</td><td>GPIO6(Trig)/GPIO5(Echo,中断)</td><td>前方避障测距</td></tr>
+    <tr><td>空气质量</td><td>MQ-135</td><td>1</td><td>ADC GPIO0</td><td>空气质量检测</td></tr>
+    <tr><td>GPS</td><td>VK2828U7G5LF (UART)</td><td>1</td><td>UART1 (RX7/TX8)</td><td>经纬度+卫星数</td></tr>
+    <tr><td>LED</td><td>5mm 红/绿 + 220Ω</td><td>2</td><td>GPIO10/GPIO4</td><td>状态+警告指示</td></tr>
+    <tr><td>电源</td><td>4×AA 电池盒 (6V)</td><td>1</td><td>—</td><td>全系统同源供电</td></tr>
+    <tr><td>电容</td><td>电解电容 100~1000μF</td><td>1</td><td>并电源入口</td><td>缓冲舵机启动电流</td></tr>
+  </tbody>
+</table>
+
+<h3>技术栈</h3>
+<table class="hw-table">
+  <thead>
+    <tr><th>层级</th><th>技术</th><th>说明</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>MCU 平台</td><td>ESP32-C3 (RISC-V)</td><td>Arduino Core 3.3.8</td></tr>
+    <tr><td>无线通信</td><td>ESP-NOW (2.4GHz 信道1)</td><td>单播模式，控制 50Hz / 传感器 2Hz</td></tr>
+    <tr><td>舵机驱动</td><td>ESP32Servo 库</td><td>硬件定时器直接 PWM，弃用 LEDC</td></tr>
+    <tr><td>实时任务</td><td>FreeRTOS</td><td>独立舵机更新任务，优先级2，50Hz</td></tr>
+    <tr><td>显示</td><td>Adafruit_GFX + ST7735</td><td>四页面局部刷新 UI</td></tr>
+    <tr><td>GPS 解析</td><td>TinyGPS++</td><td>NMEA 0183 协议解析</td></tr>
+    <tr><td>测距</td><td>HC-SR04 中断 + 中值滤波</td><td>CHANGE 中断替代 pulseIn()</td></tr>
+    <tr><td>ADC</td><td>ESP32 12-bit SAR ADC</td><td>MQ-135 模拟读取 + 8 样本均值滤波</td></tr>
+  </tbody>
+</table>
+
+<h3>核心代码架构</h3>
+<pre>数据流:
+遥控器:  摇杆ADC → readJoy() → outgoing_ctrl → esp_now_send() → 50Hz
+                                                       ↕ ESP-NOW 信道1
+小车端:  onDataRecv() → incoming_ctrl → applyObstacleLimit() → servoTask 50Hz → 舵机
+         readSensors() → outgoing_sensor → esp_now_send() → 2Hz → 遥控器 TFT 显示
+
+任务架构 (小车端 FreeRTOS):
+  loop_task (优先级1): GPS喂入 → 传感器读取 → 超时检测 → 避障LED → 数据发送
+  servoTask (优先级2): 每20ms精确执行, 舵机控制与避障限速统一入口
+
+关键参数:
+  CTRL_TIMEOUT_MS     = 2000   # 遥控超时2秒自动停车
+  DISTANCE_ALERT_MM   = 500    # 50cm 预警减速
+  DISTANCE_STOP_MM    = 300    # 30cm 刹停
+  STEER_CENTER_US     = 1530   # 转向中位微调
+  SERVO_HZ            = 50     # 舵机更新频率</pre>
+
+<h3>源文件下载</h3>
+<table class="hw-table">
+  <thead>
+    <tr><th>文件</th><th>说明</th><th>下载</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>vehicle.ino</code></td>
+      <td>小车端固件 (ESP32Servo, FreeRTOS舵机任务, HC-SR04中断测距, 避障限速)</td>
+      <td><a href="源文件/vehicle.ino" style="color:var(--accent);" download>📥 下载</a></td>
+    </tr>
+    <tr>
+      <td><code>remote_control.ino</code></td>
+      <td>遥控器端固件 (四页面系统, 单摇杆, SW1/SW2切页, 局部刷新)</td>
+      <td><a href="源文件/remote_control.ino" style="color:var(--accent);" download>📥 下载</a></td>
+    </tr>
+    <tr>
+      <td><code>遥控小车建模.zip</code></td>
+      <td>3D 建模源文件 (底盘、传动箱、转向模块、轮毂轮胎等全部 STL)<br><span style="font-size:0.83em;color:var(--muted);">开源出处：B站 <a href="https://space.bilibili.com/58593690" style="color:var(--accent);" target="_blank" rel="noopener">苦工创客Matt</a> · <a href="https://www.bilibili.com/video/BV1Tt5T6MEDb" style="color:var(--accent);" target="_blank" rel="noopener">BV1Tt5T6MEDb</a></span></td>
+      <td><a href="源文件/遥控小车建模.zip" style="color:var(--accent);" download>📥 下载</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ============================================================ -->
+<!-- REFLECTIONS -->
+<!-- ============================================================ -->
+<h2>四、Reflections — 硬核 Bug 与解决方案</h2>
+
+<div class="bug-grid">
+  <div class="bug-card severe">
+    <h4>#1 ESP-NOW 信道漂移</h4>
+    <div class="symptom">症状: 收包率 ~1 pkt/s，频繁断连</div>
+    <div class="root">根因: peer.channel=0 让两板自动选信道 → 不在同一信道</div>
+    <div class="fix">解决: esp_wifi_set_channel(1) 强制锁定 → 220+ pkt/s</div>
+    <p style="margin-top:8px;font-size:0.83em;color:var(--muted);">
+      <strong>反思：</strong>ESP-NOW 的 channel=0"自动"选项在各平台行为不一。WiFi 栈在信道间扫描时收包率剧烈波动。强制性信道锁定是本项目通信链路的第一守则。今后所有 ESP-NOW 项目直接锁定信道，不再相信"自动"。
+    </p>
+  </div>
+
+  <div class="bug-card severe">
+    <h4>#2 LEDC PWM 不产出波形</h4>
+    <div class="symptom">症状: 串口显示脉宽正确，但舵机不转</div>
+    <div class="root">根因: Arduino Core 3.3.8 下 ledcAttach/ledcWrite 不工作</div>
+    <div class="fix">解决: 更换为 ESP32Servo 库 (硬件定时器直驱)</div>
+    <p style="margin-top:8px;font-size:0.83em;color:var(--muted);">
+      <strong>反思：</strong>库版本兼容性是嵌入式开发最隐蔽的坑。代码逻辑全对但硬件无输出 → 一定是抽象层出了问题。LED+电阻测试法是最简诊断工具，10秒确认问题不在代码逻辑而在硬件抽象层。
+    </p>
+  </div>
+
+  <div class="bug-card severe">
+    <h4>#3 前进慢/后退正常 (三因叠加)</h4>
+    <div class="symptom">症状: 前进时舵机抖慢，后退正常</div>
+    <div class="root">根因: ①loop阻塞 ②竞态条件 ③HC-SR04噪声 → 仅影响前进</div>
+    <div class="fix">解决: FreeRTOS解耦 + 统一限速入口 + 中断+脉宽校验+中值滤波</div>
+    <p style="margin-top:8px;font-size:0.83em;color:var(--muted);">
+      <strong>反思：</strong>这是本项目最复杂的 Bug——三个独立问题叠加，每个只影响前进方向。最大的教训是：<strong>"单向不对称 Bug"几乎总是由方向相关条件触发</strong>（避障只拦截 speed>0）。调试时要特别注意那些看起来与问题无关的条件分支。FreeRTOS 独立任务对于消除 loop() 阻塞是终极方案，但代价是引入了竞态风险，必须通过统一写入口来消除。
+    </p>
+  </div>
+
+  <div class="bug-card medium">
+    <h4>#4 TFT 彩边偏移 (7次失败)</h4>
+    <div class="symptom">症状: 画面偏移，四边彩边</div>
+    <div class="root">根因: ST7735 子型号与 initR+rotation 组合不匹配</div>
+    <div class="fix">解决: 历经7种组合 → GREENTAB + rotation 0</div>
+    <p style="margin-top:8px;font-size:0.83em;color:var(--muted);">
+      <strong>反思：</strong>ST7735 有多种子型号（GREEN/BLACK/RED/GREENTAB160x80 等），每种对应不同的显示偏移寄存器初始值。自动轮换测试工具（4 方向 × 3 秒）比手动改代码效率提升 10 倍。自定义 offset 子类方法失败的原因是 <code>setRotation()</code> 内部会重新读取 tabcolor 数组覆盖手动设置——不看库源码就写"修复"是无效的。
+    </p>
+  </div>
+
+  <div class="bug-card medium">
+    <h4>#5 GPIO19 (USB D+) 占用</h4>
+    <div class="symptom">症状: SW2 按键无任何响应</div>
+    <div class="root">根因: ESP32-C3 原生 USB 占用 GPIO19 (D+)</div>
+    <div class="fix">解决: SW2 迁移到 GPIO10</div>
+    <p style="margin-top:8px;font-size:0.83em;color:var(--muted);">
+      <strong>反思：</strong>ESP32-C3 的 GPIO 并非全是"通用"的。GPIO9(Flash CS)、GPIO11(VDD_SPI)、GPIO18/19(USB) 都有特定功能。选引脚前应先查芯片数据手册的 Pin Layout 章节。
+    </p>
+  </div>
+
+  <div class="bug-card medium">
+    <h4>#6 U8g2 + ST7735 底层冲突</h4>
+    <div class="symptom">症状: u8g2.begin() 后 TFT 偏移再次错位</div>
+    <div class="root">根因: u8g2.begin(tft) 内部重置了 TFT 寄存器</div>
+    <div class="fix">妥协: 放弃中文，全英文 6×8px 字体</div>
+    <p style="margin-top:8px;font-size:0.83em;color:var(--muted);">
+      <strong>反思：</strong>两个图形库共用同一个 SPI 外设时，后启动的库会覆盖前者的寄存器配置。合理的解决方案是使用 Adafruit_GFX 的自定义字体或 bitmap 方式显示中文，但 Hackathon 时间有限，英文完全可接受。
+    </p>
+  </div>
+
+  <div class="bug-card minor">
+    <h4>#7 GPS 引脚反接</h4>
+    <div class="symptom">症状: GPS 绿灯闪烁但数据为零</div>
+    <div class="root">根因: HardwareSerial::begin(rx, tx) 参数传反</div>
+    <div class="fix">解决: 交换 begin() 的两个引脚参数</div>
+    <p style="margin-top:8px;font-size:0.83em;color:var(--muted);">
+      <strong>反思：</strong>宏命名 <code>PIN_GPS_TX</code> 的歧义是根源——它指的是 GPS 模块的 TX 还是 ESP32 的 TX？把宏名改为 <code>PIN_GPS_TO_ESP</code> / <code>PIN_ESP_TO_GPS</code> 可永久避免此问题。
+    </p>
+  </div>
+
+  <div class="bug-card minor">
+    <h4>#8 供电方案踩坑</h4>
+    <div class="symptom">症状: 加二极管降压后 ESP32 反复欠压复位</div>
+    <div class="root">根因: 1N5399 二极管压降 0.8~1.0V</div>
+    <div class="fix">解决: 4×AA 电池直连，利用内阻自然降压至 4.5~5.5V</div>
+    <p style="margin-top:8px;font-size:0.83em;color:var(--muted);">
+      <strong>反思：</strong>AA 电池内阻是天然的"软降压"——无需额外的稳压模块。舵机独立供电（不经过 ESP32 板载 LDO）但必须共地。电解电容并在电源入口是缓冲舵机堵转电流的最简方案。
+    </p>
+  </div>
+</div>
+
+<h3>调试原则总结</h3>
+<div class="reflection-block">
+  <div class="lesson">1. LED+电阻是最小可用测试仪</div>
+  <div class="detail">测 PWM 输出、GPIO 电平，用最廉价的工具做最直接的验证，比示波器更灵活（虽然只能看到"有没有"而非"波形长什么样"）。</div>
+</div>
+<div class="reflection-block">
+  <div class="lesson">2. 一次只改一个变量</div>
+  <div class="detail">改一个参数 → 烧录 → 观察 → 记录。多变量同时改动会让"哪个改动生效了"变得不可追踪。TFT 7 种组合的尝试严格遵循了此原则。</div>
+</div>
+<div class="reflection-block">
+  <div class="lesson">3. 串口即眼睛</div>
+  <div class="detail">关键节点加 <code>Serial.println()</code>，调通后降频。收包计数器、时序监控 <code>DEBUG_TIMING</code> 是本次调试最高效的信息源。</div>
+</div>
+<div class="reflection-block">
+  <div class="lesson">4. 记录成功组合</div>
+  <div class="detail"><code>INITR_GREENTAB + rotation 0</code>、<code>STEER_CENTER_US = 1530</code>、<code>esp_wifi_set_channel(1)</code>——这些"最终答案"一旦确认立即记下，不再反复试错。</div>
+</div>
+<div class="reflection-block">
+  <div class="lesson">5. "单向不对称 Bug"先查条件分支</div>
+  <div class="detail">前进慢后退正常 → 一定有只拦截 <code>speed > 0</code> 的逻辑。追踪所有对 <code>speed</code> 有条件判断的代码路径。这次是避障限速 + HC-SR04 噪声 + 竞态三连击。</div>
+</div>
+<div class="reflection-block">
+  <div class="lesson">6. 不要相信库的"自动"选项</div>
+  <div class="detail">ESP-NOW 的 channel=0"自动"在不同平台行为不一致；ledcAttach"应该"工作但在 3.3.8 下不工作。嵌入式开发中，显式 > 隐式，强制 > 自动。</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 附录：最终硬件接线 -->
+<!-- ============================================================ -->
+<h2>附录：最终硬件接线（2026-05-31）</h2>
+
+<h3>遥控器端</h3>
+<div class="wiring-diagram">
+                   <span class="label">ESP32-C3 (遥控器)</span>
+                  ┌─────────────────┐
+                  │                 │
+   摇杆 VCC ──────┤ 3.3V            │
+   摇杆 GND ──────┤ GND             │
+   摇杆 VRx ──────┤ <span class="pin">GPIO0</span>    ← 左右转向
+   摇杆 VRy ──────┤ <span class="pin">GPIO1</span>    ← 前进后退
+                  │                 │
+   SW1 按键 ──────┤ <span class="pin">GPIO18</span>   ← 下一页
+   SW2 按键 ──────┤ <span class="pin">GPIO10</span>   ← 上一页
+      (按键另一端接地 GND)       │
+                  │                 │
+   TFT VCC ───────┤ 3.3V            │
+   TFT GND ───────┤ GND             │
+   TFT CS  ───────┤ <span class="pin">GPIO4</span>           │
+   TFT DC  ───────┤ <span class="pin">GPIO5</span>           │
+   TFT RES ───────┤ <span class="pin">GPIO6</span>           │
+   TFT SDA ───────┤ <span class="pin">GPIO7</span>           │
+   TFT SCL ───────┤ <span class="pin">GPIO8</span>           │
+   TFT BL  ───────┤ 3.3V            │
+                  └─────────────────┘
+
+ 按键接线: GPIO ──┬── 按键 ── GND  (内部 INPUT_PULLUP 上拉)
+</div>
+
+<h3>小车端 (4×AA 同源供电)</h3>
+<div class="wiring-diagram">
+               4×AA 电池盒 (6V)
+              ┌─────[+]──────────────── VCC总线
+              │      │
+              │     ─┴─ 电解电容 100~1000μF (缓冲舵机启动电流)
+              │     ─┬─
+              │      │
+              └─────[-]──────────────── GND总线 (共地!)
+                      │
+               ┌──────┴──────────────┐
+               │   <span class="label">ESP32-C3 (小车)</span>    │
+               │                     │
+   ESP32 VIN ──┤ 接 VCC总线 (5~6V)   │
+   ESP32 GND ──┤ 接 GND总线           │
+               │                     │
+   驱动舵机橙 ─┤ <span class="pin">GPIO1</span>               │
+   驱动舵机红 ─┤ VCC总线               │
+   驱动舵机棕 ─┤ GND总线               │
+   转向舵机橙 ─┤ <span class="pin">GPIO2</span>               │
+   转向舵机红 ─┤ VCC总线               │
+   转向舵机棕 ─┤ GND总线               │
+               │                     │
+   状态LED ────┤ <span class="pin">GPIO10</span> (串220Ω)      │
+   警告LED ────┤ <span class="pin">GPIO4</span>  (串220Ω)      │
+               │                     │
+   MQ-135 AO ─┤ <span class="pin">GPIO0</span> (ADC)          │
+   MQ-135 VCC ┤ VCC总线               │
+   MQ-135 GND ┤ GND总线               │
+               │                     │
+   HC-SR04 VCC ┤ VCC总线               │
+   HC-SR04 GND ┤ GND总线               │
+   HC-SR04 TRIG┤ <span class="pin">GPIO6</span>               │
+   HC-SR04 ECHO┤─[1kΩ]─┬─ <span class="pin">GPIO5</span>       │
+               │       [2kΩ]          │
+               │        GND总线        │
+               │   <span class="warn">★ 5V→3.3V分压!</span>     │
+               │                     │
+   GPS VCC ────┤ VCC总线               │
+   GPS GND ────┤ GND总线               │
+   GPS TX ─────┤ <span class="pin">GPIO7</span> (ESP32 RX)     │
+   GPS RX ─────┤ <span class="pin">GPIO8</span> (ESP32 TX)     │
+               └─────────────────────┘
+
+   <span class="warn">★ 4×AA 内阻自然降压，带载约 4.5~5.5V，全模块安全</span>
+   ★ 舵机不经过 ESP32 板载LDO，直接挂 VCC总线
+   ★ 不要串二极管! 1N5399 压降 0.8~1.0V 致 ESP32 欠压复位
+   ★ 后续升级: 2S锂电池(7.4V) + 5V/3A降压模块
+</div>
+
+<div class="footer">
+  期末创新项目 · 2026年5月 Hackathon · 最后更新 2026-05-31
+</div>
+
 </body>
 </html>

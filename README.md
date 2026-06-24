@@ -20,6 +20,7 @@
 | [电子焊接入门](welding.html) | 通孔焊接五步法、焊点质量检测、LED电路焊接、故障排查 | 电烙铁、PCB板、万用表 |
 | [Arduino嵌入式编程](arduino.html) | IDE环境配置、ESP32数字/模拟IO、串口通信、WiFi控制、舵机控制、双按键智能光控系统 | Arduino IDE、ESP32开发板 |
 | [PCB设计与制作](pcb.html) | 原理图绘制、PCB布局布线、3D预览、DRC检查、生产文件导出 | 嘉立创EDA |
+| [激光切割入门](laser.html) | EagleWorks矢量图导入、激光功率/速度参数配置、切割与雕刻模式区分、材料选择与参数适配 | EagleWorks、激光切割机 |
 
 ## 🚀 创客创新项目
 ### 中期创客项目——基于开源3D打印的WiFi控制六轴机械臂
@@ -84,6 +85,7 @@
 ├── welding.html        # 电子焊接入门日志
 ├── arduino.html        # Arduino编程入门日志
 ├── pcb.html            # PCB设计入门日志
+├── laser.html          # 激光切割入门日志
 ├── midterm-project.html # 中期创客项目
 ├── final-project.html  # 期末创新项目（舵机驱动遥控小车）
 ├── 图片视频/           # 成果展示图片/视频资源
